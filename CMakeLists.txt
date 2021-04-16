@@ -29,4 +29,9 @@ install(DIRECTORY
   launch
   DESTINATION share/${PROJECT_NAME}/)
 
+install(FILES
+  nao.urdf
+  nao.rviz
+  DESTINATION share/${PROJECT_NAME}/)
+
 ament_package()

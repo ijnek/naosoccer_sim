@@ -21,7 +21,7 @@ def generate_launch_description():
             package='rviz2',
             executable='rviz2',
             arguments=[
-                "-d", 'nao.rviz'
+                "-d", os.path.join(get_package_share_directory('naosoccer_sim'), 'nao.rviz')
             ]
         )
     ])
