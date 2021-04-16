@@ -30,8 +30,8 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}/)
 
 install(FILES
-  nao.urdf
-  nao.rviz
+  urdf/nao.urdf
+  rviz/nao.rviz
   DESTINATION share/${PROJECT_NAME}/)
 
 ament_package()
