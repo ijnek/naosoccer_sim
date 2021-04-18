@@ -17,9 +17,16 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(nao_interfaces REQUIRED)
+find_package(rcss3d_controller_msgs REQUIRED)
 
 add_executable(sim src/sim.cpp)
-ament_target_dependencies(sim rclcpp)
+
+ament_target_dependencies(
+  sim
+  rclcpp
+  nao_interfaces
+  rcss3d_controller_msgs)
 
 install(TARGETS
   sim
