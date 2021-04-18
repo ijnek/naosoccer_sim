@@ -27,6 +27,10 @@ def generate_launch_description():
         Node(
             package='naosoccer_sim',
             executable='sim'
+        ),
+        Node(
+            package='naosoccer_sim',
+            executable='sim_to_nao'
         )
     ])
 

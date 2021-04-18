@@ -55,8 +55,6 @@ private:
                     rcsJointCommands->position.push_back(nao_joint_position);
                     rcsJointCommands->p_gain.push_back(P_GAIN);
                 }
-
-                RCLCPP_INFO(this->get_logger(), std::to_string(nao_joint_position));
             }
             else
             {
@@ -67,6 +65,7 @@ private:
         joint_pos_pub->publish(std::move(rcsJointCommands));
     }
 
+    // LWristYaw, LHand, RWristYaw and RHand don't exist in sim so we ignore.
     std::map<std::string, std::string> name_nao_to_sim = {
         {"HeadYaw", "he1"},
         {"HeadPitch", "he2"},

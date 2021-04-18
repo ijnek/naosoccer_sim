@@ -19,8 +19,10 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(nao_interfaces REQUIRED)
 find_package(rcss3d_controller_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 add_executable(sim src/sim.cpp)
+add_executable(sim_to_nao src/sim_to_nao.cpp)
 
 ament_target_dependencies(
   sim
@@ -28,8 +30,15 @@ ament_target_dependencies(
   nao_interfaces
   rcss3d_controller_msgs)
 
+ament_target_dependencies(
+  sim_to_nao
+  rclcpp
+  nao_interfaces
+  sensor_msgs)
+
 install(TARGETS
   sim
+  sim_to_nao
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY
