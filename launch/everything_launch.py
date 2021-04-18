@@ -23,6 +23,10 @@ def generate_launch_description():
             arguments=[
                 "-d", os.path.join(get_package_share_directory('naosoccer_sim'), 'nao.rviz')
             ]
+        ),
+        Node(
+            package='naosoccer_sim',
+            executable='sim'
         )
     ])
 
