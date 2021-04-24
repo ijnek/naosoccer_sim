@@ -12,10 +12,21 @@ def generate_launch_description():
         Node(
             package='rcss3d_controller',
             executable='rcss3d_controller_node',
+            namespace='sim',
+            remappings=[
+                ('/joint_commands', '/sim/joint_commands'),
+                ('/joint_states', '/sim/joint_states')
+            ]
         ),
         Node(
             package='rcss3d_controller',
             executable='rcss3d_joint_controller_node',
+            namespace='sim',
+            remappings=[
+                ('/joint_positions', '/sim/joint_positions'),
+                ('/joint_commands', '/sim/joint_commands'),
+                ('/joint_states', '/sim/joint_states')
+            ]
         ),
         Node(
             package='rviz2',
@@ -26,11 +37,15 @@ def generate_launch_description():
         ),
         Node(
             package='naosoccer_sim',
-            executable='nao_to_sim_node'
+            executable='nao_to_sim_node',
+            namespace='sim',
+            remappings=[('/joint_positions', "/sim/joint_positions")]
         ),
         Node(
             package='naosoccer_sim',
-            executable='sim_to_nao_node'
+            executable='sim_to_nao_node',
+            namespace='sim',
+            remappings=[('/joint_states', "/sim/joint_states")]
         ),
         Node(
             package='naosoccer_pos_action',
@@ -39,7 +54,8 @@ def generate_launch_description():
             emulate_tty=True,
             parameters=[
                 {"file": os.path.join(get_package_share_directory('naosoccer_pos_action'), 'pos', 'test_arms.pos')}
-            ]
+            ],
+            namespace='robot'
         )
     ])
 
@@ -67,4 +83,6 @@ def robot_state_publisher():
             name='robot_state_publisher',
             output='screen',
             parameters=[{'use_sim_time': use_sim_time, 'robot_description': robot_desc}],
-            arguments=[urdf])
+            arguments=[urdf],
+            remappings=[('/joint_states', "/sim/joint_states")]
+        )

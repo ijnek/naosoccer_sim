@@ -39,7 +39,7 @@ std::vector<std::string> nao_joints_to_invert = {
 SimToNao::SimToNao()
     : Node("SimToNao")
 {
-    pub = create_publisher<nao_interfaces::msg::JointPositionState>("/joint_position_state", 1);
+    pub = create_publisher<nao_interfaces::msg::JointPositions>("/joint_positions", 1);
 
     sub =
         create_subscription<sensor_msgs::msg::JointState>(
@@ -51,7 +51,7 @@ SimToNao::SimToNao()
 
 void SimToNao::sim_to_nao(sensor_msgs::msg::JointState::UniquePtr joint_states)
 {
-    auto jointPositionState = std::make_unique<nao_interfaces::msg::JointPositionState>();
+    auto jointPositions = std::make_unique<nao_interfaces::msg::JointPositions>();
 
     for (auto i = 0u; i < joint_states->name.size(); ++i)
     {
@@ -62,7 +62,7 @@ void SimToNao::sim_to_nao(sensor_msgs::msg::JointState::UniquePtr joint_states)
         {
             auto nao_joint_name = it->second;
 
-            jointPositionState->name.push_back(nao_joint_name);
+            jointPositions->name.push_back(nao_joint_name);
 
             auto sim_joint_position = joint_states->position[i];
 
@@ -71,9 +71,9 @@ void SimToNao::sim_to_nao(sensor_msgs::msg::JointState::UniquePtr joint_states)
                 sim_joint_position *= -1;
             }
 
-            jointPositionState->position.push_back(sim_joint_position);
+            jointPositions->position.push_back(sim_joint_position);
         }
     }
 
-    pub->publish(std::move(jointPositionState));
+    pub->publish(std::move(jointPositions));
 }

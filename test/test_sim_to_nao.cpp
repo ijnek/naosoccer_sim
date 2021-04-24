@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "rclcpp/rclcpp.hpp"
 #include <sensor_msgs/msg/joint_state.hpp>
-#include <nao_interfaces/msg/joint_position_state.hpp>
+#include <nao_interfaces/msg/joint_positions.hpp>
 
 using namespace std::chrono_literals;
 
@@ -23,9 +23,9 @@ public:
         node = std::make_shared<rclcpp::Node>("node");
 
         subscription =
-            node->create_subscription<nao_interfaces::msg::JointPositionState>(
-                "/joint_position_state", 1,
-                [this](nao_interfaces::msg::JointPositionState::UniquePtr nao_joint_positions) {
+            node->create_subscription<nao_interfaces::msg::JointPositions>(
+                "/joint_positions", 1,
+                [this](nao_interfaces::msg::JointPositions::UniquePtr nao_joint_positions) {
                     this->nao_joint_positions = std::move(nao_joint_positions);
                     received = true;
                 });
@@ -45,9 +45,9 @@ public:
 
     rclcpp::Node::SharedPtr node;
     rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr publisher;
-    rclcpp::Subscription<nao_interfaces::msg::JointPositionState>::SharedPtr subscription;
+    rclcpp::Subscription<nao_interfaces::msg::JointPositions>::SharedPtr subscription;
 
-    nao_interfaces::msg::JointPositionState::UniquePtr nao_joint_positions;
+    nao_interfaces::msg::JointPositions::UniquePtr nao_joint_positions;
     bool received;
 
     void test(

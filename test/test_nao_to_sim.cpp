@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "rclcpp/rclcpp.hpp"
-#include "nao_interfaces/msg/joint_position_command.hpp"
+#include "nao_interfaces/msg/joint_commands.hpp"
 #include "rcss3d_controller_msgs/msg/joint_position_command.hpp"
 
 using namespace std::chrono_literals;
@@ -30,7 +30,7 @@ public:
                     received = true;
                 });
 
-        publisher = node->create_publisher<nao_interfaces::msg::JointPositionCommand>("/nao_joint_positions", 1);
+        publisher = node->create_publisher<nao_interfaces::msg::JointCommands>("/joint_commands", 1);
 
         received = false;
     }
@@ -44,33 +44,33 @@ public:
     }
 
     rclcpp::Node::SharedPtr node;
-    rclcpp::Publisher<nao_interfaces::msg::JointPositionCommand>::SharedPtr publisher;
+    rclcpp::Publisher<nao_interfaces::msg::JointCommands>::SharedPtr publisher;
     rclcpp::Subscription<rcss3d_controller_msgs::msg::JointPositionCommand>::SharedPtr subscription;
 
     rcss3d_controller_msgs::msg::JointPositionCommand::UniquePtr sim_joint_positions;
     bool received;
 
     void test(
-        std::map<std::string, float> nao_joint_positions_to_send,
+        std::map<std::string, float> nao_joint_commands_to_send,
         std::map<std::string, float> expected_sim_joint_positions);
 };
 
 void TestNaoToSim::test(
-    std::map<std::string, float> nao_joint_positions_to_send,
+    std::map<std::string, float> nao_joint_commands_to_send,
     std::map<std::string, float> expected_sim_joint_positions)
 {
 
-    nao_interfaces::msg::JointPositionCommand naoJointsPositionsToSend;
+    nao_interfaces::msg::JointCommands naoJointCommandsToSend;
 
-    for (auto const &[key, val] : nao_joint_positions_to_send)
+    for (auto const &[key, val] : nao_joint_commands_to_send)
     {
-        naoJointsPositionsToSend.name.push_back(key);
-        naoJointsPositionsToSend.position.push_back(val);
+        naoJointCommandsToSend.name.push_back(key);
+        naoJointCommandsToSend.position.push_back(val);
     }
 
     while (!received)
     {
-        publisher->publish(naoJointsPositionsToSend);
+        publisher->publish(naoJointCommandsToSend);
         std::this_thread::sleep_for(1s);
         rclcpp::spin_some(node);
     }
@@ -84,7 +84,7 @@ void TestNaoToSim::test(
 
 TEST_F(TestNaoToSim, Test)
 {
-    std::map<std::string, float> nao_joint_positions_to_send = {
+    std::map<std::string, float> nao_joint_commands_to_send = {
         {"HeadYaw", -0.01},
         {"HeadPitch", 0},
         {"LShoulderPitch", 0.01},
@@ -136,5 +136,5 @@ TEST_F(TestNaoToSim, Test)
         {"rae4", 0.20},
     };
 
-    test(nao_joint_positions_to_send, expected_sim_joint_positions);
+    test(nao_joint_commands_to_send, expected_sim_joint_positions);
 }

@@ -40,32 +40,32 @@ static const std::vector<std::string> nao_joints_to_invert = {
     "RShoulderPitch"};
 
 NaoToSim::NaoToSim()
-    : Node("sim")
+    : Node("NaoToSim")
 {
     joint_pos_pub = create_publisher<rcss3d_controller_msgs::msg::JointPositionCommand>("/joint_positions", 1);
 
     joint_pos_sub =
-        create_subscription<nao_interfaces::msg::JointPositionCommand>(
-            "/nao_joint_positions", 1,
-            [this](nao_interfaces::msg::JointPositionCommand::UniquePtr nao_joint_positions) {
-                auto sim = nao_to_sim(std::move(nao_joint_positions));
+        create_subscription<nao_interfaces::msg::JointCommands>(
+            "/joint_commands", 1,
+            [this](nao_interfaces::msg::JointCommands::UniquePtr nao_joint_commands) {
+                auto sim = nao_to_sim(std::move(nao_joint_commands));
                 joint_pos_pub->publish(std::move(sim));
             });
 }
 
-rcss3d_controller_msgs::msg::JointPositionCommand::UniquePtr NaoToSim::nao_to_sim(nao_interfaces::msg::JointPositionCommand::UniquePtr nao_joint_positions)
+rcss3d_controller_msgs::msg::JointPositionCommand::UniquePtr NaoToSim::nao_to_sim(nao_interfaces::msg::JointCommands::UniquePtr nao_joint_commands)
 {
     auto rcsJointCommands = std::make_unique<rcss3d_controller_msgs::msg::JointPositionCommand>();
-    for (auto i = 0u; i < nao_joint_positions->name.size(); ++i)
+    for (auto i = 0u; i < nao_joint_commands->name.size(); ++i)
     {
-        auto nao_joint_name = nao_joint_positions->name[i];
+        auto nao_joint_name = nao_joint_commands->name[i];
 
         auto it = name_nao_to_sim.find(nao_joint_name);
         if (it != name_nao_to_sim.end())
         {
             rcsJointCommands->name.push_back(it->second);
 
-            auto nao_joint_position = nao_joint_positions->position[i];
+            auto nao_joint_position = nao_joint_commands->position[i];
 
             if (std::find(nao_joints_to_invert.begin(), nao_joints_to_invert.end(), nao_joint_name) != nao_joints_to_invert.end())
             {
