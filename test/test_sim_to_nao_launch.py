@@ -13,15 +13,15 @@ def main(argv=sys.argv[1:]):
 
     ld = LaunchDescription([])
 
-    nao_to_sim_node = Node(
+    sim_to_nao_node = Node(
         package='naosoccer_sim',
-        executable='nao_to_sim_node'
+        executable='sim_to_nao_node'
     )
-    ld.add_action(nao_to_sim_node)
+    ld.add_action(sim_to_nao_node)
 
     test1_action = ExecuteProcess(
             cmd=[testExecutable],
-            name='test_nao_to_sim',
+            name='test_sim_to_nao',
             output='screen',
         )
 

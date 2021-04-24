@@ -84,7 +84,6 @@ void TestNaoToSim::test(
 
 TEST_F(TestNaoToSim, Test)
 {
-
     std::map<std::string, float> nao_joint_positions_to_send = {
         {"HeadYaw", -0.01},
         {"HeadPitch", 0},
