@@ -26,11 +26,11 @@ def generate_launch_description():
         ),
         Node(
             package='naosoccer_sim',
-            executable='sim'
+            executable='nao_to_sim_node'
         ),
         Node(
             package='naosoccer_sim',
-            executable='sim_to_nao'
+            executable='sim_to_nao_node'
         ),
         Node(
             package='naosoccer_pos_action',
@@ -38,7 +38,7 @@ def generate_launch_description():
             output="screen",
             emulate_tty=True,
             parameters=[
-                {"file": os.path.join(get_package_share_directory('naosoccer_pos_action'), 'pos', 'head_test.pos')}
+                {"file": os.path.join(get_package_share_directory('naosoccer_pos_action'), 'pos', 'test_arms.pos')}
             ]
         )
     ])
