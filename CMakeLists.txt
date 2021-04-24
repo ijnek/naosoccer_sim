@@ -8,12 +8,16 @@ endif()
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 17)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
+
+include_directories(
+  include
+)
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -21,33 +25,62 @@ find_package(nao_interfaces REQUIRED)
 find_package(rcss3d_controller_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
-add_executable(sim src/sim.cpp)
-add_executable(sim_to_nao src/sim_to_nao.cpp)
+# Build nao_to_sim
+add_library(nao_to_sim_lib SHARED
+  src/nao_to_sim.cpp)
 
-ament_target_dependencies(
-  sim
+ament_target_dependencies(nao_to_sim_lib
   rclcpp
   nao_interfaces
   rcss3d_controller_msgs)
 
-ament_target_dependencies(
-  sim_to_nao
+add_executable(nao_to_sim_node src/nao_to_sim_node.cpp)
+
+target_link_libraries(nao_to_sim_node nao_to_sim_lib)
+
+ament_target_dependencies(nao_to_sim_node
+  rclcpp)
+
+
+# Build sim_to_nao
+add_library(sim_to_nao_lib SHARED
+  src/sim_to_nao.cpp)
+
+ament_target_dependencies(sim_to_nao_lib
   rclcpp
   nao_interfaces
+  rcss3d_controller_msgs
   sensor_msgs)
 
+add_executable(sim_to_nao_node src/sim_to_nao_node.cpp)
+
+target_link_libraries(sim_to_nao_node sim_to_nao_lib)
+
+ament_target_dependencies(sim_to_nao_node
+  rclcpp)
+
+# Install
 install(TARGETS
-  sim
-  sim_to_nao
+  nao_to_sim_node
+  sim_to_nao_node
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY
   launch
   DESTINATION share/${PROJECT_NAME}/)
 
+install(DIRECTORY include/
+  DESTINATION include/
+)
+
 install(FILES
   urdf/nao.urdf
   rviz/nao.rviz
   DESTINATION share/${PROJECT_NAME}/)
+
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  add_subdirectory(test)
+endif()
 
 ament_package()

@@ -31,6 +31,15 @@ def generate_launch_description():
         Node(
             package='naosoccer_sim',
             executable='sim_to_nao'
+        ),
+        Node(
+            package='naosoccer_pos_action',
+            executable='linear',
+            output="screen",
+            emulate_tty=True,
+            parameters=[
+                {"file": os.path.join(get_package_share_directory('naosoccer_pos_action'), 'pos', 'head_test.pos')}
+            ]
         )
     ])
 
