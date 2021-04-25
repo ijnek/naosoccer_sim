@@ -59,10 +59,23 @@ target_link_libraries(sim_to_nao_node sim_to_nao_lib)
 ament_target_dependencies(sim_to_nao_node
   rclcpp)
 
+# Build naosoccer_sim
+add_library(naosoccer_sim_lib SHARED
+  src/naosoccer_sim.cpp)
+
+ament_target_dependencies(naosoccer_sim_lib
+  rclcpp
+  nao_interfaces)
+
+add_executable(naosoccer_sim src/naosoccer_sim_node.cpp)
+
+target_link_libraries(naosoccer_sim naosoccer_sim_lib)
+
 # Install
 install(TARGETS
   nao_to_sim_node
   sim_to_nao_node
+  naosoccer_sim
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY
