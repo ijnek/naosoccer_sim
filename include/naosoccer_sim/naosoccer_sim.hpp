@@ -2,7 +2,7 @@
 #define NAOSOCCER_SIM
 
 #include "rclcpp/rclcpp.hpp"
-#include "naosoccer_sim_interfaces/msg/joints.hpp"
+#include "nao_interfaces/msg/joints.hpp"
 #include "nao_interfaces/msg/buttons.hpp"
 #include "nao_interfaces/msg/accelerometer.hpp"
 #include "nao_interfaces/msg/gyroscope.hpp"
@@ -46,7 +46,7 @@ private:
     // - FSR
     // - Touch
 
-    rclcpp::Publisher<naosoccer_sim_interfaces::msg::Joints>::SharedPtr joints_pub;
+    rclcpp::Publisher<nao_interfaces::msg::Joints>::SharedPtr joints_pub;
     rclcpp::Publisher<nao_interfaces::msg::Buttons>::SharedPtr buttons_pub;
     rclcpp::Publisher<nao_interfaces::msg::Accelerometer>::SharedPtr accelerometer_pub;
     rclcpp::Publisher<nao_interfaces::msg::Gyroscope>::SharedPtr gyroscope_pub;

@@ -1,15 +1,9 @@
-#include "rclcpp/rclcpp.hpp"
-#include <sensor_msgs/msg/joint_state.hpp>
-#include <nao_interfaces/msg/joint_positions.hpp>
+#ifndef SIM_TO_NAO_HPP
+#define SIM_TO_NAO_HPP
 
-class SimToNao : public rclcpp::Node
-{
-public:
-    SimToNao();
+#include "nao_interfaces/msg/joints.hpp"
+#include <map>
 
-private:
-    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr sub;
-    rclcpp::Publisher<nao_interfaces::msg::JointPositions>::SharedPtr pub;
+nao_interfaces::msg::Joints sim_to_nao(std::vector<std::pair<std::string, float>> sim_joints);
 
-    void sim_to_nao(sensor_msgs::msg::JointState::UniquePtr joint_states);
-};
+#endif // SIM_TO_NAO_HPP

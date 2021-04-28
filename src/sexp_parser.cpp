@@ -2,17 +2,18 @@
 
 static constexpr double deg2rad(double rad) { return rad * 3.141592654 / 180.0; }
 
-naosoccer_sim_interfaces::msg::Joints SexpParser::getJoints()
+std::vector<std::pair<std::string, float>> SexpParser::getJoints()
 {
-    auto joints = naosoccer_sim_interfaces::msg::Joints{};
+    std::vector<std::pair<std::string, float>> joints;
     for (auto const &arg : sexp.arguments())
     {
         // Joint expressions have form: (HJ (n llj2) (ax -0.00))
         auto const &s = arg.value.sexp;
         if (s[0].value.str == "HJ")
         {
-            joints.name.push_back(s[1].value.sexp[1].value.str);
-            joints.position.push_back(std::stod(s[2].value.sexp[1].value.str));
+            std::string name = s[1].value.sexp[1].value.str;
+            float position = std::stod(s[2].value.sexp[1].value.str);
+            joints.push_back(std::make_pair(name, position));
         }
     }
     return joints;

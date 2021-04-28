@@ -24,7 +24,6 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(nao_interfaces REQUIRED)
 find_package(rcss3d_controller_msgs REQUIRED)
-find_package(sensor_msgs REQUIRED)
 find_package(naosoccer_sim_interfaces REQUIRED)
 
 # Build nao_to_sim
@@ -43,24 +42,6 @@ target_link_libraries(nao_to_sim_node nao_to_sim_lib)
 ament_target_dependencies(nao_to_sim_node
   rclcpp)
 
-
-# Build sim_to_nao
-add_library(sim_to_nao_lib SHARED
-  src/sim_to_nao.cpp)
-
-ament_target_dependencies(sim_to_nao_lib
-  rclcpp
-  nao_interfaces
-  rcss3d_controller_msgs
-  sensor_msgs)
-
-add_executable(sim_to_nao_node src/sim_to_nao_node.cpp)
-
-target_link_libraries(sim_to_nao_node sim_to_nao_lib)
-
-ament_target_dependencies(sim_to_nao_node
-  rclcpp)
-
 # Build naosoccer_sim
 add_library(naosoccer_sim_lib SHARED
   src/naosoccer_sim.cpp
@@ -69,6 +50,7 @@ add_library(naosoccer_sim_lib SHARED
   src/socketaddress.cpp
   src/sexp_creator.cpp
   src/sexp_parser.cpp
+  src/sim_to_nao.cpp
   external/sexpresso/sexpresso/sexpresso.cpp)
 
 ament_target_dependencies(naosoccer_sim_lib
@@ -83,7 +65,6 @@ target_link_libraries(naosoccer_sim naosoccer_sim_lib)
 # Install
 install(TARGETS
   nao_to_sim_node
-  sim_to_nao_node
   naosoccer_sim
   DESTINATION lib/${PROJECT_NAME})
 
@@ -101,7 +82,7 @@ install(FILES
   DESTINATION share/${PROJECT_NAME}/)
 
 install(
-  TARGETS naosoccer_sim_lib # nao_to_sim_lib sim_to_nao_lib
+  TARGETS naosoccer_sim_lib nao_to_sim_lib
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

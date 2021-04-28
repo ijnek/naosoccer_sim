@@ -1,79 +1,64 @@
-#include "rclcpp/rclcpp.hpp"
 #include "naosoccer_sim/sim_to_nao.hpp"
 
+#include <iostream>
+
 // Ignore rlj1 (RHipYawPitch) because its not an actual joint on the Nao
-std::map<std::string, std::string> name_sim_to_nao = {
-    {"hj1", "HeadYaw"},
-    {"hj2", "HeadPitch"},
-    {"laj1", "LShoulderPitch"},
-    {"laj2", "LShoulderRoll"},
-    {"laj3", "LElbowYaw"},
-    {"laj4", "LElbowRoll"},
-    {"llj1", "LHipYawPitch"},
-    {"llj2", "LHipRoll"},
-    {"llj3", "LHipPitch"},
-    {"llj4", "LKneePitch"},
-    {"llj5", "LAnklePitch"},
-    {"llj6", "LAnkleRoll"},
-    {"rlj2", "RHipRoll"},
-    {"rlj3", "RHipPitch"},
-    {"rlj4", "RKneePitch"},
-    {"rlj5", "RAnklePitch"},
-    {"rlj6", "RAnkleRoll"},
-    {"raj1", "RShoulderPitch"},
-    {"raj2", "RShoulderRoll"},
-    {"raj3", "RElbowYaw"},
-    {"raj4", "RElbowRoll"}};
+std::map<std::string, int> name_sim_to_nao = {
+    {"hj1", nao_interfaces::msg::Joints::HEADYAW},
+    {"hj2", nao_interfaces::msg::Joints::HEADPITCH},
+    {"laj1", nao_interfaces::msg::Joints::LSHOULDERPITCH},
+    {"laj2", nao_interfaces::msg::Joints::LSHOULDERROLL},
+    {"laj3", nao_interfaces::msg::Joints::LELBOWYAW},
+    {"laj4", nao_interfaces::msg::Joints::LELBOWROLL},
+    {"llj1", nao_interfaces::msg::Joints::LHIPYAWPITCH},
+    {"llj2", nao_interfaces::msg::Joints::LHIPROLL},
+    {"llj3", nao_interfaces::msg::Joints::LHIPPITCH},
+    {"llj4", nao_interfaces::msg::Joints::LKNEEPITCH},
+    {"llj5", nao_interfaces::msg::Joints::LANKLEPITCH},
+    {"llj6", nao_interfaces::msg::Joints::LANKLEROLL},
+    {"rlj2", nao_interfaces::msg::Joints::RHIPROLL},
+    {"rlj3", nao_interfaces::msg::Joints::RHIPPITCH},
+    {"rlj4", nao_interfaces::msg::Joints::RKNEEPITCH},
+    {"rlj5", nao_interfaces::msg::Joints::RANKLEPITCH},
+    {"rlj6", nao_interfaces::msg::Joints::RANKLEROLL},
+    {"raj1", nao_interfaces::msg::Joints::RSHOULDERPITCH},
+    {"raj2", nao_interfaces::msg::Joints::RSHOULDERROLL},
+    {"raj3", nao_interfaces::msg::Joints::RELBOWYAW},
+    {"raj4", nao_interfaces::msg::Joints::RELBOWROLL}};
 
-std::vector<std::string> nao_joints_to_invert = {
-    "HeadPitch",
-    "LShoulderPitch",
-    "LHipPitch",
-    "LKneePitch",
-    "LAnklePitch",
-    "RHipPitch",
-    "RKneePitch",
-    "RAnklePitch",
-    "RShoulderPitch"};
+std::vector<int> nao_joints_to_invert = {
+    nao_interfaces::msg::Joints::HEADPITCH,
+    nao_interfaces::msg::Joints::LSHOULDERPITCH,
+    nao_interfaces::msg::Joints::LHIPPITCH,
+    nao_interfaces::msg::Joints::LKNEEPITCH,
+    nao_interfaces::msg::Joints::LANKLEPITCH,
+    nao_interfaces::msg::Joints::RHIPPITCH,
+    nao_interfaces::msg::Joints::RKNEEPITCH,
+    nao_interfaces::msg::Joints::RANKLEPITCH,
+    nao_interfaces::msg::Joints::RSHOULDERPITCH};
 
-SimToNao::SimToNao()
-    : Node("SimToNao")
+nao_interfaces::msg::Joints sim_to_nao(std::vector<std::pair<std::string, float>> sim_joints)
 {
-    pub = create_publisher<nao_interfaces::msg::JointPositions>("/joint_positions", 1);
+    nao_interfaces::msg::Joints nao_joints = nao_interfaces::msg::Joints{};
 
-    sub =
-        create_subscription<sensor_msgs::msg::JointState>(
-            "/joint_states", 1,
-            [this](sensor_msgs::msg::JointState::UniquePtr joint_states) {
-                sim_to_nao(std::move(joint_states));
-            });
-}
-
-void SimToNao::sim_to_nao(sensor_msgs::msg::JointState::UniquePtr joint_states)
-{
-    auto jointPositions = std::make_unique<nao_interfaces::msg::JointPositions>();
-
-    for (auto i = 0u; i < joint_states->name.size(); ++i)
+    for (auto joint : sim_joints)
     {
-        auto sim_joint_name = joint_states->name[i];
+        auto sim_joint_name = joint.first;
+        auto it = name_sim_to_nao.find(sim_joint_name);
 
-        std::map<std::string, std::string>::iterator it = name_sim_to_nao.find(sim_joint_name);
         if (it != name_sim_to_nao.end())
         {
-            auto nao_joint_name = it->second;
+            float joint_index = it->second;
 
-            jointPositions->name.push_back(nao_joint_name);
+            auto sim_joint_position = joint.second;
 
-            auto sim_joint_position = joint_states->position[i];
-
-            if (std::find(nao_joints_to_invert.begin(), nao_joints_to_invert.end(), nao_joint_name) != nao_joints_to_invert.end())
+            if (std::find(nao_joints_to_invert.begin(), nao_joints_to_invert.end(), joint_index) != nao_joints_to_invert.end())
             {
                 sim_joint_position *= -1;
             }
 
-            jointPositions->position.push_back(sim_joint_position);
+            nao_joints.angles[joint_index] = sim_joint_position;
         }
     }
-
-    pub->publish(std::move(jointPositions));
+    return nao_joints;
 }

@@ -8,7 +8,7 @@
 #define SEXPRESSO_OPT_OUT_PIKESTYLE
 #include "sexpresso/sexpresso.hpp"
 
-#include "naosoccer_sim_interfaces/msg/joints.hpp"
+#include "nao_interfaces/msg/joints.hpp"
 #include "nao_interfaces/msg/gyroscope.hpp"
 #include "nao_interfaces/msg/accelerometer.hpp"
 
@@ -18,7 +18,7 @@ public:
     SexpParser(std::string msg) 
         : sexp(sexpresso::parse(msg)), 
           logger(rclcpp::get_logger("sexp_parser")){}
-    naosoccer_sim_interfaces::msg::Joints getJoints();
+    std::vector<std::pair<std::string, float>> getJoints();
     std::tuple<bool, nao_interfaces::msg::Accelerometer> getAccelerometer();
     std::tuple<bool, nao_interfaces::msg::Gyroscope> getGyroscope();
 

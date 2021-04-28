@@ -4,6 +4,7 @@
 #include "nao_interfaces/msg/joints.hpp"
 #include "naosoccer_sim/sexp_creator.hpp"
 #include "naosoccer_sim/sexp_parser.hpp"
+#include "naosoccer_sim/sim_to_nao.hpp"
 
 NaoSoccerSim::NaoSoccerSim()
     : Node("NaoSoccerSim")
@@ -16,7 +17,7 @@ NaoSoccerSim::NaoSoccerSim()
     this->declare_parameter("starting_pose", std::vector<double>{0, 0, 0});
 
     RCLCPP_DEBUG(get_logger(), "Initialise publishers");
-    joints_pub = create_publisher<naosoccer_sim_interfaces::msg::Joints>("/sensors/joints", 10);
+    joints_pub = create_publisher<nao_interfaces::msg::Joints>("/sensors/joints", 10);
     buttons_pub = create_publisher<nao_interfaces::msg::Buttons>("/sensors/buttons", 10);
     accelerometer_pub = create_publisher<nao_interfaces::msg::Accelerometer>("/sensors/accelerometer", 10);
     gyroscope_pub = create_publisher<nao_interfaces::msg::Gyroscope>("/sensors/gyroscope", 10);
@@ -57,7 +58,7 @@ NaoSoccerSim::NaoSoccerSim()
         RCLCPP_DEBUG(this->get_logger(), "Received: " + recv);
 
         SexpParser parsed(recv);
-        joints_pub->publish(parsed.getJoints());
+        joints_pub->publish(sim_to_nao(parsed.getJoints()));
 
         auto [acc_found, acc_val] = parsed.getAccelerometer();
         if (acc_found)
