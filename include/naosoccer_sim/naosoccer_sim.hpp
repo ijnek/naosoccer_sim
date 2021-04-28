@@ -10,6 +10,8 @@
 #include "nao_interfaces/msg/sonar.hpp"
 #include "nao_interfaces/msg/fsr.hpp"
 #include "nao_interfaces/msg/touch.hpp"
+#include "naosoccer_sim/connection.hpp"
+
 
 class NaoSoccerSim : public rclcpp::Node
 {
@@ -26,10 +28,10 @@ private:
 
     // Subscriptions
     // - JointCommand
-    // - Beam
+    // - Beam (not for now)
 
     // Publishers
-    // - Battery
+    // - Battery (not for sim)
     // - Buttons
     // - Joints
     //   - position
@@ -52,6 +54,7 @@ private:
     rclcpp::Publisher<nao_interfaces::msg::FSR>::SharedPtr fsr_pub;
     rclcpp::Publisher<nao_interfaces::msg::Touch>::SharedPtr touch_pub;
 
+    Connection connection;
 };
 
 #endif // NAOSOCCER_SIM

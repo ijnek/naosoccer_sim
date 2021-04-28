@@ -17,6 +17,7 @@ endif()
 
 include_directories(
   include
+  external/sexpresso/
 )
 
 find_package(ament_cmake REQUIRED)
@@ -61,7 +62,12 @@ ament_target_dependencies(sim_to_nao_node
 
 # Build naosoccer_sim
 add_library(naosoccer_sim_lib SHARED
-  src/naosoccer_sim.cpp)
+  src/naosoccer_sim.cpp
+  src/connection.cpp
+  src/socket.cpp
+  src/socketaddress.cpp
+  src/sexp_creator.cpp
+  external/sexpresso/sexpresso/sexpresso.cpp)
 
 ament_target_dependencies(naosoccer_sim_lib
   rclcpp
@@ -90,6 +96,14 @@ install(FILES
   urdf/nao.urdf
   rviz/nao.rviz
   DESTINATION share/${PROJECT_NAME}/)
+
+install(
+  TARGETS naosoccer_sim_lib # nao_to_sim_lib sim_to_nao_lib
+  EXPORT export_${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
