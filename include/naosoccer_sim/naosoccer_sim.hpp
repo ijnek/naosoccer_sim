@@ -11,6 +11,7 @@
 #include "nao_interfaces/msg/fsr.hpp"
 #include "nao_interfaces/msg/touch.hpp"
 #include "naosoccer_sim/connection.hpp"
+#include "naosoccer_sim_interfaces/msg/joint_speed_command.hpp"
 
 
 class NaoSoccerSim : public rclcpp::Node
@@ -53,6 +54,8 @@ private:
     rclcpp::Publisher<nao_interfaces::msg::Sonar>::SharedPtr sonar_pub;
     rclcpp::Publisher<nao_interfaces::msg::FSR>::SharedPtr fsr_pub;
     rclcpp::Publisher<nao_interfaces::msg::Touch>::SharedPtr touch_pub;
+
+    rclcpp::Subscription<naosoccer_sim_interfaces::msg::JointSpeedCommand>::SharedPtr jsc_sub;
 
     Connection connection;
 };

@@ -24,6 +24,17 @@ NaoSoccerSim::NaoSoccerSim()
     fsr_pub = create_publisher<nao_interfaces::msg::FSR>("/sensors/fsr", 10);
     touch_pub = create_publisher<nao_interfaces::msg::Touch>("/sensors/touch", 10);
 
+    RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
+    jsc_sub =
+        create_subscription<naosoccer_sim_interfaces::msg::JointSpeedCommand>(
+            "/joint_speed_commands", 10,
+            [this](naosoccer_sim_interfaces::msg::JointSpeedCommand::SharedPtr cmd) {
+                std::string joint_message = SexpCreator::createJointMessage(cmd);
+                RCLCPP_DEBUG(this->get_logger(), "Sending: " + joint_message);
+                connection.send(joint_message);
+            });
+
+    // Initialise connection
     connection.initialise(
         get_parameter("host").as_string(),
         get_parameter("port").as_int());
@@ -38,11 +49,10 @@ NaoSoccerSim::NaoSoccerSim()
     connection.send(SexpCreator::createInitMessage(
         get_parameter("team_name").as_string(), get_parameter("player_number").as_int()));
 
-    // Start receive/send loop
+    // Start receive loop
     while (true)
     {
         std::string recv = connection.receive();
-        connection.send("");
+        RCLCPP_DEBUG(this->get_logger(), "Received: " + recv);
     }
-
 }

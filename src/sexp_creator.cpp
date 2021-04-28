@@ -42,4 +42,16 @@ namespace SexpCreator
 
         return createMessage(initSexp);
     }
+
+    std::string createJointMessage(naosoccer_sim_interfaces::msg::JointSpeedCommand::SharedPtr cmd)
+    {
+        auto sexp = sexpresso::Sexp{};
+        for (auto i = 0u; i < cmd->name.size(); ++i)
+        {
+            auto jointSexp = sexpresso::Sexp{cmd->name[i]};
+            jointSexp.addChild(std::to_string(cmd->speed[i]));
+            sexp.addChild(std::move(jointSexp));
+        }
+        return createMessage(sexp, false);
+    }
 }

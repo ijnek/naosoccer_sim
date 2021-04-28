@@ -25,6 +25,7 @@ find_package(rclcpp REQUIRED)
 find_package(nao_interfaces REQUIRED)
 find_package(rcss3d_controller_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(naosoccer_sim_interfaces REQUIRED)
 
 # Build nao_to_sim
 add_library(nao_to_sim_lib SHARED
@@ -71,7 +72,8 @@ add_library(naosoccer_sim_lib SHARED
 
 ament_target_dependencies(naosoccer_sim_lib
   rclcpp
-  nao_interfaces)
+  nao_interfaces
+  naosoccer_sim_interfaces)
 
 add_executable(naosoccer_sim src/naosoccer_sim_node.cpp)
 
