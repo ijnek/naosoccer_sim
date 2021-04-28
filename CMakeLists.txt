@@ -68,6 +68,7 @@ add_library(naosoccer_sim_lib SHARED
   src/socket.cpp
   src/socketaddress.cpp
   src/sexp_creator.cpp
+  src/sexp_parser.cpp
   external/sexpresso/sexpresso/sexpresso.cpp)
 
 ament_target_dependencies(naosoccer_sim_lib

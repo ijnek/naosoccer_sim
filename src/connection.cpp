@@ -4,7 +4,7 @@
 #include <netinet/tcp.h>
 
 Connection::Connection()
-    : logger(rclcpp::get_logger("naosoccer_sim__connection")),
+    : logger(rclcpp::get_logger("connection")),
       socket_(PF_INET, SOCK_STREAM, 0),
       socket_address_()
 {
