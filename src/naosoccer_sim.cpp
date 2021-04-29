@@ -8,7 +8,7 @@
 #include "naosoccer_sim/nao_to_sim.hpp"
 
 NaoSoccerSim::NaoSoccerSim()
-    : Node("NaoSoccerSim")
+    : Node("NaoSoccerSim", "sim")
 {
     RCLCPP_DEBUG(get_logger(), "Declare parameters");
     this->declare_parameter<std::string>("host", "127.0.0.1");
