@@ -36,12 +36,6 @@ def generate_launch_description():
             ]
         ),
         Node(
-            package='naosoccer_sim',
-            executable='nao_to_sim_node',
-            namespace='sim',
-            remappings=[('/joint_positions', "/sim/joint_positions")]
-        ),
-        Node(
             package='naosoccer_pos_action',
             executable='linear',
             output="screen",

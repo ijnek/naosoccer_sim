@@ -1,117 +1,60 @@
 #include <gtest/gtest.h>
-#include "rclcpp/rclcpp.hpp"
-#include "nao_interfaces/msg/joint_commands.hpp"
-#include "rcss3d_controller_msgs/msg/joint_position_command.hpp"
+#include "naosoccer_sim/nao_to_sim.hpp"
 
-using namespace std::chrono_literals;
-
-class TestNaoToSim : public ::testing::Test
+void test(
+    nao_interfaces::msg::Joints nao_joints,
+    std::map<std::string, float> expected_sim_joints)
 {
-public:
-    static void SetUpTestCase()
+    std::vector<std::pair<std::string, float>> converted = nao_to_sim(nao_joints);
+
+    for (auto const &[name, val] : converted)
     {
-        rclcpp::init(0, nullptr);
-    }
-
-    static void TearDownTestCase()
-    {
-        rclcpp::shutdown();
-    }
-
-    void SetUp()
-    {
-        node = std::make_shared<rclcpp::Node>("node");
-
-        subscription =
-            node->create_subscription<rcss3d_controller_msgs::msg::JointPositionCommand>(
-                "/joint_positions", 1,
-                [this](rcss3d_controller_msgs::msg::JointPositionCommand::UniquePtr sim_joint_positions) {
-                    this->sim_joint_positions = std::move(sim_joint_positions);
-                    received = true;
-                });
-
-        publisher = node->create_publisher<nao_interfaces::msg::JointCommands>("/joint_commands", 1);
-
-        received = false;
-    }
-
-    void
-    TearDown()
-    {
-        publisher.reset();
-        subscription.reset();
-        node.reset();
-    }
-
-    rclcpp::Node::SharedPtr node;
-    rclcpp::Publisher<nao_interfaces::msg::JointCommands>::SharedPtr publisher;
-    rclcpp::Subscription<rcss3d_controller_msgs::msg::JointPositionCommand>::SharedPtr subscription;
-
-    rcss3d_controller_msgs::msg::JointPositionCommand::UniquePtr sim_joint_positions;
-    bool received;
-
-    void test(
-        std::map<std::string, float> nao_joint_commands_to_send,
-        std::map<std::string, float> expected_sim_joint_positions);
-};
-
-void TestNaoToSim::test(
-    std::map<std::string, float> nao_joint_commands_to_send,
-    std::map<std::string, float> expected_sim_joint_positions)
-{
-
-    nao_interfaces::msg::JointCommands naoJointCommandsToSend;
-
-    for (auto const &[key, val] : nao_joint_commands_to_send)
-    {
-        naoJointCommandsToSend.name.push_back(key);
-        naoJointCommandsToSend.position.push_back(val);
-    }
-
-    while (!received)
-    {
-        publisher->publish(naoJointCommandsToSend);
-        std::this_thread::sleep_for(1s);
-        rclcpp::spin_some(node);
-    }
-
-    for (unsigned i = 0; i < sim_joint_positions->name.size(); ++i)
-    {
-        std::string name = sim_joint_positions->name[i];
-        EXPECT_EQ(sim_joint_positions->position[i], expected_sim_joint_positions.at(name));
+        EXPECT_EQ(expected_sim_joints.at(name), val);
     }
 }
 
-TEST_F(TestNaoToSim, Test)
+nao_interfaces::msg::Joints createJointsMsg(std::map<int, float> nao_joints_map)
 {
-    std::map<std::string, float> nao_joint_commands_to_send = {
-        {"HeadYaw", -0.01},
-        {"HeadPitch", 0},
-        {"LShoulderPitch", 0.01},
-        {"LShoulderRoll", 0.02},
-        {"LElbowYaw", 0.03},
-        {"LElbowRoll", 0.04},
-        {"LWristYaw", 0.05},
-        {"LHipYawPitch", 0.06},
-        {"LHipRoll", 0.07},
-        {"LHipPitch", 0.08},
-        {"LKneePitch", 0.09},
-        {"LAnklePitch", 0.10},
-        {"LAnkleRoll", 0.11},
-        {"RHipRoll", 0.12},
-        {"RHipPitch", 0.13},
-        {"RKneePitch", 0.14},
-        {"RAnklePitch", 0.15},
-        {"RAnkleRoll", 0.16},
-        {"RShoulderPitch", 0.17},
-        {"RShoulderRoll", 0.18},
-        {"RElbowYaw", 0.19},
-        {"RElbowRoll", 0.20},
-        {"RWristYaw", 0.21},
-        {"LHand", 0.22},
-        {"RHand", 0.23}};
+    nao_interfaces::msg::Joints naoJoints;
 
-    std::map<std::string, float> expected_sim_joint_positions = {
+    for (auto const &[key, val] : nao_joints_map)
+    {
+        naoJoints.angles.at(key) = val;
+    }
+    return naoJoints;
+}
+
+
+TEST(TestJointsNaoToSim, Test)
+{
+    std::map<int, float> nao_joints_map = {
+        {nao_interfaces::msg::Joints::HEADYAW, -0.01},
+        {nao_interfaces::msg::Joints::HEADPITCH, 0},
+        {nao_interfaces::msg::Joints::LSHOULDERPITCH, 0.01},
+        {nao_interfaces::msg::Joints::LSHOULDERROLL, 0.02},
+        {nao_interfaces::msg::Joints::LELBOWYAW, 0.03},
+        {nao_interfaces::msg::Joints::LELBOWROLL, 0.04},
+        {nao_interfaces::msg::Joints::LWRISTYAW, 0.05},
+        {nao_interfaces::msg::Joints::LHIPYAWPITCH, 0.06},
+        {nao_interfaces::msg::Joints::LHIPROLL, 0.07},
+        {nao_interfaces::msg::Joints::LHIPPITCH, 0.08},
+        {nao_interfaces::msg::Joints::LKNEEPITCH, 0.09},
+        {nao_interfaces::msg::Joints::LANKLEPITCH, 0.10},
+        {nao_interfaces::msg::Joints::LANKLEROLL, 0.11},
+        {nao_interfaces::msg::Joints::RHIPROLL, 0.12},
+        {nao_interfaces::msg::Joints::RHIPPITCH, 0.13},
+        {nao_interfaces::msg::Joints::RKNEEPITCH, 0.14},
+        {nao_interfaces::msg::Joints::RANKLEPITCH, 0.15},
+        {nao_interfaces::msg::Joints::RANKLEROLL, 0.16},
+        {nao_interfaces::msg::Joints::RSHOULDERPITCH, 0.17},
+        {nao_interfaces::msg::Joints::RSHOULDERROLL, 0.18},
+        {nao_interfaces::msg::Joints::RELBOWYAW, 0.19},
+        {nao_interfaces::msg::Joints::RELBOWROLL, 0.20},
+        {nao_interfaces::msg::Joints::RWRISTYAW, 0.21},
+        {nao_interfaces::msg::Joints::LHAND, 0.22},
+        {nao_interfaces::msg::Joints::RHAND, 0.23}};
+
+    std::map<std::string, float> expected_sim_joints = {
         {"he1", -0.01},
         {"he2", 0},
         {"lae1", -0.01},
@@ -136,5 +79,6 @@ TEST_F(TestNaoToSim, Test)
         {"rae4", 0.20},
     };
 
-    test(nao_joint_commands_to_send, expected_sim_joint_positions);
+    nao_interfaces::msg::Joints nao_joints = createJointsMsg(nao_joints_map);
+    test(nao_joints, expected_sim_joints);
 }

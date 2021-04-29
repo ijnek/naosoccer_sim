@@ -5,6 +5,7 @@
 #include "naosoccer_sim/sexp_creator.hpp"
 #include "naosoccer_sim/sexp_parser.hpp"
 #include "naosoccer_sim/sim_to_nao.hpp"
+#include "naosoccer_sim/nao_to_sim.hpp"
 
 NaoSoccerSim::NaoSoccerSim()
     : Node("NaoSoccerSim")
@@ -27,13 +28,17 @@ NaoSoccerSim::NaoSoccerSim()
     touch_pub = create_publisher<nao_interfaces::msg::Touch>("/sensors/touch", 10);
 
     RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
-    jsc_sub =
-        create_subscription<naosoccer_sim_interfaces::msg::JointSpeedCommand>(
-            "/joint_speed_commands", 10,
-            [this](naosoccer_sim_interfaces::msg::JointSpeedCommand::SharedPtr cmd) {
-                std::string joint_message = SexpCreator::createJointMessage(cmd);
-                RCLCPP_DEBUG(this->get_logger(), "Sending: " + joint_message);
-                connection.send(joint_message);
+    joints_sub =
+        create_subscription<nao_interfaces::msg::Joints>(
+            "/effectors/joints", 10,
+            [this](nao_interfaces::msg::Joints::SharedPtr cmd_nao) {
+
+                std::vector<std::pair<std::string, float>> cmd_sim = nao_to_sim(*cmd_nao);
+                // std::vector<std::pair<std::string, float>> speed_cmd_sim = naoJointsPid.update(cmd_sim);
+                
+                // std::string msg = SexpCreator::createJointMessage(speed_cmd_sim);
+                // RCLCPP_DEBUG(this->get_logger(), "Sending: " + msg);
+                // connection.send(msg);
             });
 
     // Initialise connection

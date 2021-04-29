@@ -37,7 +37,7 @@ std::vector<int> nao_joints_to_invert = {
     nao_interfaces::msg::Joints::RANKLEPITCH,
     nao_interfaces::msg::Joints::RSHOULDERPITCH};
 
-nao_interfaces::msg::Joints sim_to_nao(std::vector<std::pair<std::string, float>> sim_joints)
+nao_interfaces::msg::Joints sim_to_nao(const std::vector<std::pair<std::string, float>> &sim_joints)
 {
     nao_interfaces::msg::Joints nao_joints = nao_interfaces::msg::Joints{};
 

@@ -9,13 +9,13 @@ void test(
 
     for (auto const& [key, val] : expected)
     {
-        EXPECT_EQ(converted.angles[key], val);
+        EXPECT_EQ(converted.angles.at(key), val);
     }
 }
 
-TEST(TestJointsSimToNao, Test)
+TEST(TestSimToNao, Test)
 {
-    std::vector<std::pair<std::string, float>> sim_joint_positions_to_send = {
+    std::vector<std::pair<std::string, float>> sim_joints = {
         {"hj1", -0.01},
         {"hj2", -0.02},
         {"laj1", 0.01},
@@ -67,5 +67,5 @@ TEST(TestJointsSimToNao, Test)
         {nao_interfaces::msg::Joints::LHAND, 0.0},
         {nao_interfaces::msg::Joints::RHAND, 0.0}};
 
-    test(sim_joint_positions_to_send, expected_nao_joint_positions);
+    test(sim_joints, expected_nao_joint_positions);
 }
