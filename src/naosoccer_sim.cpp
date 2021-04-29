@@ -32,13 +32,10 @@ NaoSoccerSim::NaoSoccerSim()
         create_subscription<nao_interfaces::msg::Joints>(
             "/effectors/joints", 10,
             [this](nao_interfaces::msg::Joints::SharedPtr cmd_nao) {
+                RCLCPP_DEBUG(this->get_logger(), "Received /effectors/joints");
 
-                std::vector<std::pair<std::string, float>> cmd_sim = nao_to_sim(*cmd_nao);
-                // std::vector<std::pair<std::string, float>> speed_cmd_sim = naoJointsPid.update(cmd_sim);
-                
-                // std::string msg = SexpCreator::createJointMessage(speed_cmd_sim);
-                // RCLCPP_DEBUG(this->get_logger(), "Sending: " + msg);
-                // connection.send(msg);
+                SimJoints cmd_sim = nao_to_sim(*cmd_nao);
+                naoJointsPid.setTarget(cmd_sim);
             });
 
     // Initialise connection
@@ -57,20 +54,37 @@ NaoSoccerSim::NaoSoccerSim()
         get_parameter("team_name").as_string(), get_parameter("player_number").as_int()));
 
     // Start receive loop
-    while (true)
-    {
-        std::string recv = connection.receive();
-        RCLCPP_DEBUG(this->get_logger(), "Received: " + recv);
+    receive_thread_ = std::thread(
+        [this]() {
+            while (rclcpp::ok())
+            {
+                std::string recv = connection.receive();
+                RCLCPP_DEBUG(this->get_logger(), "Received: " + recv);
 
-        SexpParser parsed(recv);
-        joints_pub->publish(sim_to_nao(parsed.getJoints()));
+                SexpParser parsed(recv);
 
-        auto [acc_found, acc_val] = parsed.getAccelerometer();
-        if (acc_found)
-            accelerometer_pub->publish(acc_val);
+                std::vector<std::pair<std::string, float>> joints = parsed.getJoints();
+                joints_pub->publish(sim_to_nao(joints));
 
-        auto [gyr_found, gyr_val] = parsed.getGyroscope();
-        if (gyr_found)
-            gyroscope_pub->publish(gyr_val);
-    }
+                auto [acc_found, acc_val] = parsed.getAccelerometer();
+                if (acc_found)
+                    accelerometer_pub->publish(acc_val);
+
+                auto [gyr_found, gyr_val] = parsed.getGyroscope();
+                if (gyr_found)
+                    gyroscope_pub->publish(gyr_val);
+
+                
+                SimJoints speed_cmd_sim = naoJointsPid.update(toSimJoints(joints));
+                std::string msg = SexpCreator::createJointMessage(fromSimJoints(speed_cmd_sim));
+                RCLCPP_DEBUG(this->get_logger(), "Sending: " + msg);
+                connection.send(msg);
+            }
+        });
+}
+
+NaoSoccerSim::~NaoSoccerSim()
+{
+    if (receive_thread_.joinable())
+        receive_thread_.join();
 }

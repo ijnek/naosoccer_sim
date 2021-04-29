@@ -1,7 +1,5 @@
 #include "naosoccer_sim/sim_to_nao.hpp"
 
-#include <iostream>
-
 // Ignore rlj1 (RHipYawPitch) because its not an actual joint on the Nao
 std::map<std::string, int> name_sim_to_nao = {
     {"hj1", nao_interfaces::msg::Joints::HEADYAW},

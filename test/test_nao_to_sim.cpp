@@ -3,13 +3,13 @@
 
 void test(
     nao_interfaces::msg::Joints nao_joints,
-    std::map<std::string, float> expected_sim_joints)
+    std::map<SimJointIndex, float> expected_sim_joints)
 {
-    std::vector<std::pair<std::string, float>> converted = nao_to_sim(nao_joints);
+    SimJoints converted = nao_to_sim(nao_joints);
 
-    for (auto const &[name, val] : converted)
+    for (auto const &[sim_index, val] : expected_sim_joints)
     {
-        EXPECT_EQ(expected_sim_joints.at(name), val);
+        EXPECT_EQ(converted.at(sim_index), val);
     }
 }
 
@@ -54,29 +54,29 @@ TEST(TestJointsNaoToSim, Test)
         {nao_interfaces::msg::Joints::LHAND, 0.22},
         {nao_interfaces::msg::Joints::RHAND, 0.23}};
 
-    std::map<std::string, float> expected_sim_joints = {
-        {"he1", -0.01},
-        {"he2", 0},
-        {"lae1", -0.01},
-        {"lae2", 0.02},
-        {"lae3", 0.03},
-        {"lae4", 0.04},
-        {"lle1", 0.06},
-        {"lle2", 0.07},
-        {"lle3", -0.08},
-        {"lle4", -0.09},
-        {"lle5", -0.10},
-        {"lle6", 0.11},
-        {"rle1", 0.06},
-        {"rle2", 0.12},
-        {"rle3", -0.13},
-        {"rle4", -0.14},
-        {"rle5", -0.15},
-        {"rle6", 0.16},
-        {"rae1", -0.17},
-        {"rae2", 0.18},
-        {"rae3", 0.19},
-        {"rae4", 0.20},
+    std::map<SimJointIndex, float> expected_sim_joints = {
+        {he1, -0.01},
+        {he2, 0},
+        {lae1, -0.01},
+        {lae2, 0.02},
+        {lae3, 0.03},
+        {lae4, 0.04},
+        {lle1, 0.06},
+        {lle2, 0.07},
+        {lle3, -0.08},
+        {lle4, -0.09},
+        {lle5, -0.10},
+        {lle6, 0.11},
+        {rle1, 0.06},
+        {rle2, 0.12},
+        {rle3, -0.13},
+        {rle4, -0.14},
+        {rle5, -0.15},
+        {rle6, 0.16},
+        {rae1, -0.17},
+        {rae2, 0.18},
+        {rae3, 0.19},
+        {rae4, 0.20},
     };
 
     nao_interfaces::msg::Joints nao_joints = createJointsMsg(nao_joints_map);

@@ -11,12 +11,15 @@
 #include "nao_interfaces/msg/fsr.hpp"
 #include "nao_interfaces/msg/touch.hpp"
 #include "naosoccer_sim/connection.hpp"
+#include "naosoccer_sim/nao_joints_pid.hpp"
+#include <thread>
 
 
 class NaoSoccerSim : public rclcpp::Node
 {
 public:
     NaoSoccerSim();
+    virtual ~NaoSoccerSim();
 
 private:
     // Parameters (things that don't change)
@@ -57,6 +60,10 @@ private:
     rclcpp::Subscription<nao_interfaces::msg::Joints>::SharedPtr joints_sub;
 
     Connection connection;
+
+    NaoJointsPid naoJointsPid;
+
+    std::thread receive_thread_;
 };
 
 #endif // NAOSOCCER_SIM

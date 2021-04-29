@@ -12,7 +12,7 @@ std::vector<std::pair<std::string, float>> SexpParser::getJoints()
         if (s[0].value.str == "HJ")
         {
             std::string name = s[1].value.sexp[1].value.str;
-            float position = std::stod(s[2].value.sexp[1].value.str);
+            float position = deg2rad(std::stod(s[2].value.sexp[1].value.str));
             joints.push_back(std::make_pair(name, position));
         }
     }

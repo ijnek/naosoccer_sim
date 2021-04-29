@@ -13,3 +13,12 @@ ament_add_gtest(test_sim_to_nao
 target_link_libraries(test_sim_to_nao
     naosoccer_sim_lib
 )
+
+
+# Build test_joint_pid
+ament_add_gtest(test_joint_pid
+  test_joint_pid.cpp)
+
+target_link_libraries(test_joint_pid
+    naosoccer_sim_lib
+)
