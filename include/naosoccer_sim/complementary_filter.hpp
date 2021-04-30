@@ -25,14 +25,14 @@ public:
     {
     }
 
-    void addMeasurement(const nao_interfaces::msg::Accelerometer &acc,
-                        const nao_interfaces::msg::Gyroscope &gyr);
-
-    nao_interfaces::msg::Angle getAngle();
+    nao_interfaces::msg::Angle update(const nao_interfaces::msg::Accelerometer &acc,
+                                      const nao_interfaces::msg::Gyroscope &gyr);
 
 private:
     float x_;
     float y_;
+
+    nao_interfaces::msg::Angle getAngle();
 };
 
 #endif // COMPLEMENTARY_FILTER_HPP

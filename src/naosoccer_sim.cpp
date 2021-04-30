@@ -66,19 +66,15 @@ NaoSoccerSim::NaoSoccerSim()
                 std::vector<std::pair<std::string, float>> joints = parsed.getJoints();
                 joints_pub->publish(sim_to_nao(joints));
 
-                auto [acc_found, acc_val] = parsed.getAccelerometer();
-                if (acc_found)
-                    accelerometer_pub->publish(acc_val);
+                nao_interfaces::msg::Accelerometer acc_val = parsed.getAccelerometer();
+                accelerometer_pub->publish(acc_val);
 
-                auto [gyr_found, gyr_val] = parsed.getGyroscope();
-                if (gyr_found)
-                    gyroscope_pub->publish(gyr_val);
+                nao_interfaces::msg::Gyroscope gyr_val = parsed.getGyroscope();
+                gyroscope_pub->publish(gyr_val);
 
-                if (acc_found && gyr_found)
-                {
-                    complementaryFilter.addMeasurement(acc_val, gyr_val);
-                    angle_pub->publish(complementaryFilter.getAngle());
-                }
+                angle_pub->publish(complementaryFilter.update(acc_val, gyr_val));
+
+                fsr_pub->publish(parsed.getFSR());
                 
                 SimJoints speed_cmd_sim = naoJointsPid.update(toSimJoints(joints));
                 std::string msg = SexpCreator::createJointMessage(fromSimJoints(speed_cmd_sim));
