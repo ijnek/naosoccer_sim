@@ -36,6 +36,7 @@ add_library(naosoccer_sim_lib SHARED
   src/nao_to_sim.cpp
   src/nao_joints_pid.cpp
   src/sim_joints.cpp
+  src/complementary_filter.cpp
   external/sexpresso/sexpresso/sexpresso.cpp)
 
 ament_target_dependencies(naosoccer_sim_lib

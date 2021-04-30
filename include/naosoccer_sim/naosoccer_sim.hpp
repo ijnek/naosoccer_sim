@@ -13,6 +13,7 @@
 #include "naosoccer_sim/connection.hpp"
 #include "naosoccer_sim/nao_joints_pid.hpp"
 #include <thread>
+#include "naosoccer_sim/complementary_filter.hpp"
 
 
 class NaoSoccerSim : public rclcpp::Node
@@ -62,6 +63,7 @@ private:
     Connection connection;
 
     NaoJointsPid naoJointsPid;
+    ComplementaryFilter complementaryFilter;
 
     std::thread receive_thread_;
 };

@@ -53,7 +53,7 @@ NaoSoccerSim::NaoSoccerSim()
     connection.send(SexpCreator::createInitMessage(
         get_parameter("team_name").as_string(), get_parameter("player_number").as_int()));
 
-    // Start receive loop
+    // Start receive and send loop
     receive_thread_ = std::thread(
         [this]() {
             while (rclcpp::ok())
@@ -74,6 +74,11 @@ NaoSoccerSim::NaoSoccerSim()
                 if (gyr_found)
                     gyroscope_pub->publish(gyr_val);
 
+                if (acc_found && gyr_found)
+                {
+                    complementaryFilter.addMeasurement(acc_val, gyr_val);
+                    angle_pub->publish(complementaryFilter.getAngle());
+                }
                 
                 SimJoints speed_cmd_sim = naoJointsPid.update(toSimJoints(joints));
                 std::string msg = SexpCreator::createJointMessage(fromSimJoints(speed_cmd_sim));
