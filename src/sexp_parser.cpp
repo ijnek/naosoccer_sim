@@ -1,4 +1,5 @@
 #include "naosoccer_sim/sexp_parser.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 static constexpr double deg2rad(double rad) { return rad * 3.141592654 / 180.0; }
 
@@ -19,6 +20,7 @@ std::vector<std::pair<std::string, float>> SexpParser::getJoints()
     return joints;
 }
 
+// eg. (ACC (n torso) (a 0.00 0.00 9.81))
 nao_interfaces::msg::Accelerometer SexpParser::getAccelerometer()
 {
     nao_interfaces::msg::Accelerometer accelerometerMsg;
@@ -42,6 +44,7 @@ nao_interfaces::msg::Accelerometer SexpParser::getAccelerometer()
     return accelerometerMsg;
 }
 
+// eg. (GYR (n torso) (rt 0.01 0.07 0.46))
 nao_interfaces::msg::Gyroscope SexpParser::getGyroscope()
 {
     nao_interfaces::msg::Gyroscope gyroscopeMsg;
@@ -104,4 +107,30 @@ nao_interfaces::msg::FSR SexpParser::getFSR()
     }
 
     return fsrMsg;
+}
+
+
+// Eg. (See (G2R (pol 17.55 -3.33 4.31))
+//          (B (pol 8.51 -0.21 -0.17)))
+std::tuple<bool, geometry_msgs::msg::Vector3Stamped> SexpParser::getBall()
+{
+    geometry_msgs::msg::Vector3Stamped ballVec;
+
+    auto const *ballSexp = sexp.getChildByPath("See/B/pol");
+    bool found = (ballSexp != nullptr);
+    if (found)
+    {
+        RCLCPP_DEBUG(logger, "Found ball information");
+
+        float distance = std::stof(ballSexp->value.sexp.at(1).value.str);
+        float horizontal_angle_phi = deg2rad(std::stof(ballSexp->value.sexp.at(2).value.str));
+        float vertical_angle_theta = deg2rad(std::stof(ballSexp->value.sexp.at(3).value.str));
+
+        ballVec.header.frame_id = "CameraTop_frame";
+        ballVec.vector.x = distance * cos(horizontal_angle_phi) * cos(vertical_angle_theta);
+        ballVec.vector.y = distance * sin(horizontal_angle_phi) * cos(vertical_angle_theta);
+        ballVec.vector.z = distance * sin(vertical_angle_theta);
+    }
+
+    return std::make_tuple(found, ballVec);
 }

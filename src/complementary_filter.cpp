@@ -2,8 +2,6 @@
 
 #include <cmath>
 
-#include <iostream>
-
 #define SIM_DT 1.0 / 50.0
 
 #define ACC_WEIGHT 0.01

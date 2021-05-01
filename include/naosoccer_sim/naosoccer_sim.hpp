@@ -14,6 +14,7 @@
 #include "naosoccer_sim/nao_joints_pid.hpp"
 #include <thread>
 #include "naosoccer_sim/complementary_filter.hpp"
+#include "geometry_msgs/msg/vector3_stamped.hpp"
 
 
 class NaoSoccerSim : public rclcpp::Node
@@ -57,6 +58,7 @@ private:
     rclcpp::Publisher<nao_interfaces::msg::Sonar>::SharedPtr sonar_pub;
     rclcpp::Publisher<nao_interfaces::msg::FSR>::SharedPtr fsr_pub;
     rclcpp::Publisher<nao_interfaces::msg::Touch>::SharedPtr touch_pub;
+    rclcpp::Publisher<geometry_msgs::msg::Vector3Stamped>::SharedPtr ball_pub;
 
     rclcpp::Subscription<nao_interfaces::msg::Joints>::SharedPtr joints_sub;
 

@@ -23,6 +23,9 @@ include_directories(
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(nao_interfaces REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(visualization_msgs REQUIRED)
 
 # Build naosoccer_sim
 add_library(naosoccer_sim_lib SHARED
@@ -41,29 +44,40 @@ add_library(naosoccer_sim_lib SHARED
 
 ament_target_dependencies(naosoccer_sim_lib
   rclcpp
-  nao_interfaces)
+  nao_interfaces
+  geometry_msgs)
 
 add_executable(naosoccer_sim src/naosoccer_sim_node.cpp)
 
 target_link_libraries(naosoccer_sim naosoccer_sim_lib)
 
+# Build joints_to_joint_state publisher
+add_executable(joints_to_joint_state src/joints_to_joint_state.cpp)
+ament_target_dependencies(joints_to_joint_state
+  rclcpp
+  sensor_msgs
+  nao_interfaces)
+
+# Buildg vector3_to_marker
+add_executable(vector3_to_marker src/vector3_to_marker.cpp)
+ament_target_dependencies(vector3_to_marker
+  rclcpp
+  geometry_msgs
+  visualization_msgs)
+
 # Install
 install(TARGETS
-  naosoccer_sim
+  naosoccer_sim joints_to_joint_state vector3_to_marker
   DESTINATION lib/${PROJECT_NAME})
-
-install(DIRECTORY
-  launch
-  DESTINATION share/${PROJECT_NAME}/)
 
 install(DIRECTORY include/
   DESTINATION include/
 )
 
-install(FILES
-  urdf/nao.urdf
-  rviz/nao.rviz
-  DESTINATION share/${PROJECT_NAME}/)
+foreach(dir launch rviz)
+  install(DIRECTORY ${dir}/ 
+     DESTINATION share/${PROJECT_NAME}/${dir}/)
+endforeach(dir)
 
 install(
   TARGETS naosoccer_sim_lib

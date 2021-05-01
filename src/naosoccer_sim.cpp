@@ -26,6 +26,7 @@ NaoSoccerSim::NaoSoccerSim()
     sonar_pub = create_publisher<nao_interfaces::msg::Sonar>("/sensors/sonar", 10);
     fsr_pub = create_publisher<nao_interfaces::msg::FSR>("/sensors/fsr", 10);
     touch_pub = create_publisher<nao_interfaces::msg::Touch>("/sensors/touch", 10);
+    ball_pub = create_publisher<geometry_msgs::msg::Vector3Stamped>("/vision/ball", 10);
 
     RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
     joints_sub =
@@ -75,6 +76,13 @@ NaoSoccerSim::NaoSoccerSim()
                 angle_pub->publish(complementaryFilter.update(acc_val, gyr_val));
 
                 fsr_pub->publish(parsed.getFSR());
+
+                auto [ball_found, ball] = parsed.getBall();
+                if (ball_found)
+                {
+                    ball.header.stamp = now();
+                    ball_pub->publish(ball);
+                }
                 
                 SimJoints speed_cmd_sim = naoJointsPid.update(toSimJoints(joints));
                 std::string msg = SexpCreator::createJointMessage(fromSimJoints(speed_cmd_sim));
