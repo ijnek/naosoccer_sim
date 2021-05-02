@@ -112,9 +112,9 @@ nao_interfaces::msg::FSR SexpParser::getFSR()
 
 // Eg. (See (G2R (pol 17.55 -3.33 4.31))
 //          (B (pol 8.51 -0.21 -0.17)))
-std::tuple<bool, geometry_msgs::msg::Vector3Stamped> SexpParser::getBall()
+std::tuple<bool, geometry_msgs::msg::PointStamped> SexpParser::getBall()
 {
-    geometry_msgs::msg::Vector3Stamped ballVec;
+    geometry_msgs::msg::PointStamped ballPoint;
 
     auto const *ballSexp = sexp.getChildByPath("See/B/pol");
     bool found = (ballSexp != nullptr);
@@ -126,11 +126,11 @@ std::tuple<bool, geometry_msgs::msg::Vector3Stamped> SexpParser::getBall()
         float horizontal_angle_phi = deg2rad(std::stof(ballSexp->value.sexp.at(2).value.str));
         float vertical_angle_theta = deg2rad(std::stof(ballSexp->value.sexp.at(3).value.str));
 
-        ballVec.header.frame_id = "CameraTop_frame";
-        ballVec.vector.x = distance * cos(horizontal_angle_phi) * cos(vertical_angle_theta);
-        ballVec.vector.y = distance * sin(horizontal_angle_phi) * cos(vertical_angle_theta);
-        ballVec.vector.z = distance * sin(vertical_angle_theta);
+        ballPoint.header.frame_id = "CameraTop_frame";
+        ballPoint.point.x = distance * cos(horizontal_angle_phi) * cos(vertical_angle_theta);
+        ballPoint.point.y = distance * sin(horizontal_angle_phi) * cos(vertical_angle_theta);
+        ballPoint.point.z = distance * sin(vertical_angle_theta);
     }
 
-    return std::make_tuple(found, ballVec);
+    return std::make_tuple(found, ballPoint);
 }

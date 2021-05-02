@@ -26,7 +26,7 @@ NaoSoccerSim::NaoSoccerSim()
     sonar_pub = create_publisher<nao_interfaces::msg::Sonar>("/sensors/sonar", 10);
     fsr_pub = create_publisher<nao_interfaces::msg::FSR>("/sensors/fsr", 10);
     touch_pub = create_publisher<nao_interfaces::msg::Touch>("/sensors/touch", 10);
-    ball_pub = create_publisher<geometry_msgs::msg::Vector3Stamped>("/vision/ball", 10);
+    ball_pub = create_publisher<geometry_msgs::msg::PointStamped>("/vision/ball", 10);
 
     RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
     joints_sub =

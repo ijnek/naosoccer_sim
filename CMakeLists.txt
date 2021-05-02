@@ -58,16 +58,16 @@ ament_target_dependencies(joints_to_joint_state
   sensor_msgs
   nao_interfaces)
 
-# Buildg vector3_to_marker
-add_executable(vector3_to_marker src/vector3_to_marker.cpp)
-ament_target_dependencies(vector3_to_marker
+# Buildg ball_to_marker
+add_executable(ball_to_marker src/ball_to_marker.cpp)
+ament_target_dependencies(ball_to_marker
   rclcpp
   geometry_msgs
   visualization_msgs)
 
 # Install
 install(TARGETS
-  naosoccer_sim joints_to_joint_state vector3_to_marker
+  naosoccer_sim joints_to_joint_state ball_to_marker
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY include/

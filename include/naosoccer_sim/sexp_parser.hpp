@@ -12,7 +12,7 @@
 #include "nao_interfaces/msg/gyroscope.hpp"
 #include "nao_interfaces/msg/accelerometer.hpp"
 #include "nao_interfaces/msg/fsr.hpp"
-#include "geometry_msgs/msg/vector3_stamped.hpp"
+#include "geometry_msgs/msg/point_stamped.hpp"
 
 // See https://gitlab.com/robocup-sim/SimSpark/-/wikis/Perceptors#forceresistance-perceptor
 // to figure out which perceptors are available on each cycle, and which are not.
@@ -29,7 +29,7 @@ public:
     nao_interfaces::msg::Accelerometer getAccelerometer();
     nao_interfaces::msg::Gyroscope getGyroscope();
     nao_interfaces::msg::FSR getFSR();
-    std::tuple<bool, geometry_msgs::msg::Vector3Stamped> getBall();
+    std::tuple<bool, geometry_msgs::msg::PointStamped> getBall();
 
     // gamestate
     // observation

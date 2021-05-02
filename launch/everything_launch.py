@@ -26,7 +26,7 @@ def generate_launch_description():
         ),
         Node(
             package='naosoccer_sim',
-            executable='vector3_to_marker'
+            executable='ball_to_marker'
         )
     ])
 
