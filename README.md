@@ -3,6 +3,7 @@ ROS2 package for nao in robocup SPL
 
 Dependencies:
 * nao_interfaces
+* nao_description
 
 Clone using (https or ssh, as the following)
 `git clone --recursive https://github.com/ijnek/naosoccer_sim.git`
