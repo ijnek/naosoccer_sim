@@ -1,3 +1,4 @@
 [submodule "external/sexpresso"]
 	path = external/sexpresso
-	url = git@github.com:BitPuffin/sexpresso.git
+	url = https://github.com/BitPuffin/sexpresso.git
+	branch = master
