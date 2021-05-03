@@ -9,9 +9,9 @@ class PointToMarker : public rclcpp::Node
 public:
     PointToMarker() : Node("PointToMarker")
     {
-        publisher_ = this->create_publisher<visualization_msgs::msg::Marker>("/ball_marker", 10);
+        publisher_ = this->create_publisher<visualization_msgs::msg::Marker>("ball_marker", 10);
         subscriber_ = this->create_subscription<geometry_msgs::msg::PointStamped>(
-            "/vision/ball", 1,
+            "vision/ball", 1,
             [this](geometry_msgs::msg::PointStamped::SharedPtr point) {
                 publisher_->publish(convert(*point));
             });

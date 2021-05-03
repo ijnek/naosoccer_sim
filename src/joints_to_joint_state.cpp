@@ -35,9 +35,9 @@ class JointsToJointState : public rclcpp::Node
 public:
     JointsToJointState() : Node("JointsToJointState")
     {
-        publisher_ = this->create_publisher<sensor_msgs::msg::JointState>("/joint_states", 10);
+        publisher_ = this->create_publisher<sensor_msgs::msg::JointState>("joint_states", 10);
         subscriber_ = this->create_subscription<nao_interfaces::msg::Joints>(
-            "/sensors/joints", 1,
+            "sensors/joints", 1,
             [this](nao_interfaces::msg::Joints::SharedPtr sensor_joints) {
                 publisher_->publish(convert(*sensor_joints));
             });
