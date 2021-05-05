@@ -13,9 +13,12 @@ NaoSoccerSim::NaoSoccerSim()
     RCLCPP_DEBUG(get_logger(), "Declare parameters");
     this->declare_parameter<std::string>("host", "127.0.0.1");
     this->declare_parameter<int>("port", 3100);
-    this->declare_parameter<std::string>("team_name", "Anonymous");
+    this->declare_parameter<std::string>("team", "Anonymous");
     this->declare_parameter<int>("player_number", 0);
-    this->declare_parameter("starting_pose", std::vector<double>{0, 0, 0});
+    this->declare_parameter<double>("initial_pose_x", 0.0);
+    this->declare_parameter<double>("initial_pose_y", 0.0);
+    this->declare_parameter<double>("initial_pose_theta", 0.0);
+
 
     RCLCPP_DEBUG(get_logger(), "Initialise publishers");
     joints_pub = create_publisher<nao_interfaces::msg::Joints>("sensors/joints", 10);
@@ -52,7 +55,7 @@ NaoSoccerSim::NaoSoccerSim()
 
     // Send init
     connection.send(SexpCreator::createInitMessage(
-        get_parameter("team_name").as_string(), get_parameter("player_number").as_int()));
+        get_parameter("team").as_string(), get_parameter("player_number").as_int()));
 
     // Start receive and send loop
     receive_thread_ = std::thread(

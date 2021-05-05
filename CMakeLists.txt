@@ -25,7 +25,6 @@ find_package(rclcpp REQUIRED)
 find_package(nao_interfaces REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(visualization_msgs REQUIRED)
 
 # Build naosoccer_sim
 add_library(naosoccer_sim_lib SHARED
@@ -58,23 +57,16 @@ ament_target_dependencies(joints_to_joint_state
   sensor_msgs
   nao_interfaces)
 
-# Build ball_to_marker
-add_executable(ball_to_marker src/ball_to_marker.cpp)
-ament_target_dependencies(ball_to_marker
-  rclcpp
-  geometry_msgs
-  visualization_msgs)
-
 # Install
 install(TARGETS
-  naosoccer_sim joints_to_joint_state ball_to_marker
+  naosoccer_sim joints_to_joint_state
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY include/
   DESTINATION include/
 )
 
-foreach(dir launch rviz)
+foreach(dir launch)
   install(DIRECTORY ${dir}/ 
      DESTINATION share/${PROJECT_NAME}/${dir}/)
 endforeach(dir)
