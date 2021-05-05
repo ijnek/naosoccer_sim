@@ -58,7 +58,7 @@ ament_target_dependencies(joints_to_joint_state
   sensor_msgs
   nao_interfaces)
 
-# Buildg ball_to_marker
+# Build ball_to_marker
 add_executable(ball_to_marker src/ball_to_marker.cpp)
 ament_target_dependencies(ball_to_marker
   rclcpp
