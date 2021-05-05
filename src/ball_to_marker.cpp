@@ -22,7 +22,7 @@ private:
     {
         visualization_msgs::msg::Marker marker;
         marker.header = point.header;
-        marker.ns = "my_namespace";
+        marker.ns = "";
         marker.id = 0;
         marker.type = visualization_msgs::msg::Marker::SPHERE;
         marker.action = visualization_msgs::msg::Marker::ADD;
