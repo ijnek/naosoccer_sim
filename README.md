@@ -1,6 +1,8 @@
 # naosoccer_sim
 ROS2 package for nao in robocup SPL
 
+Documentation can be found on our [ReadTheDocs page](https://naosoccer-sim.readthedocs.io/)
+
 Dependencies:
 * nao_interfaces
 * nao_description
