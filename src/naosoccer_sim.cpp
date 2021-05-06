@@ -19,7 +19,6 @@ NaoSoccerSim::NaoSoccerSim()
     this->declare_parameter<double>("initial_pose_y", 0.0);
     this->declare_parameter<double>("initial_pose_theta", 0.0);
 
-
     RCLCPP_DEBUG(get_logger(), "Initialise publishers");
     joints_pub = create_publisher<nao_interfaces::msg::Joints>("sensors/joints", 10);
     buttons_pub = create_publisher<nao_interfaces::msg::Buttons>("sensors/buttons", 10);
@@ -56,6 +55,15 @@ NaoSoccerSim::NaoSoccerSim()
     // Send init
     connection.send(SexpCreator::createInitMessage(
         get_parameter("team").as_string(), get_parameter("player_number").as_int()));
+
+    // Receive, this is needed for the beam message to be sent next
+    connection.receive();
+
+    // Send beam
+    connection.send(SexpCreator::createBeamMessage(
+        get_parameter("initial_pose_x").as_double(),
+        get_parameter("initial_pose_y").as_double(),
+        get_parameter("initial_pose_theta").as_double()));
 
     // Start receive and send loop
     receive_thread_ = std::thread(

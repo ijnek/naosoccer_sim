@@ -3,6 +3,11 @@
 #define SEXPRESSO_OPT_OUT_PIKESTYLE
 #include "sexpresso/sexpresso.hpp"
 
+static const float DEG_OVER_RAD = 180 / 3.1415926;
+inline static float RAD2DEG(const float x) {
+   return ((x) * DEG_OVER_RAD);
+}
+
 namespace SexpCreator
 {
     std::string createMessage(sexpresso::Sexp sexp, bool wrap = true)
@@ -53,5 +58,14 @@ namespace SexpCreator
             sexp.addChild(std::move(jointSexp));
         }
         return createMessage(sexp, false);
+    }
+
+    std::string createBeamMessage(double x, double y, double theta)
+    {
+        auto sexp = sexpresso::Sexp{"beam"};
+        sexp.addChild(std::to_string(x));
+        sexp.addChild(std::to_string(y));
+        sexp.addChild(std::to_string(RAD2DEG(theta)));
+        return createMessage(sexp);
     }
 }
