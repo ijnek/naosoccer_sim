@@ -1,5 +1,5 @@
 # naosoccer_sim
-ROS2 package for nao in robocup SPL
+ROS2 package for interacting with the SimSpark simulation used in the RoboCup 3D simulation league, from a nao api.
 
 Documentation can be found on our [ReadTheDocs page](https://naosoccer-sim.readthedocs.io/)
 
