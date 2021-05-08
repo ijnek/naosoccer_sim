@@ -58,9 +58,17 @@ class ButtonsPublisher(Node):
 
     def __init__(self):
         super().__init__('buttons_publisher')
+
+        self.declare_parameter('frequency', 50)
+
         self.publisher_ = self.create_publisher(Buttons, 'buttons', 10)
-        timer_period = 0.02  # seconds
-        self.timer = self.create_timer(timer_period, self.timer_callback)
+        frequency = self.get_parameter('frequency').get_parameter_value().integer_value
+        if frequency == 0:
+            print('Could not read parameter correctly. frequency must be an integer greater than zero')
+            exit()
+
+        self.timer = self.create_timer(1.0 / frequency, self.timer_callback)
+
 
     def timer_callback(self):
         msg = Buttons()
