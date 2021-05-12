@@ -56,7 +56,7 @@ void Connection::connect()
     initConnection();
   } catch (std::runtime_error &) {
     RCLCPP_ERROR(
-      logger, "Failed connecting to server. " +
+      logger, "Failed connecting to server. "
       "Please ensure that the simulation server is running.");
   }
 }
