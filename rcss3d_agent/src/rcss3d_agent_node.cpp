@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "rcss3d_agent/rcss3d_agent.hpp"
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
-    rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<NaoSoccerSim>());
-    rclcpp::shutdown();
-    return 0;
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<NaoSoccerSim>());
+  rclcpp::shutdown();
+  return 0;
 }

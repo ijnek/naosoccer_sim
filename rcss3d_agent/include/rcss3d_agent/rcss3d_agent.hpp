@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef NAOSOCCER_SIM
-#define NAOSOCCER_SIM
+#ifndef RCSS3D_AGENT__RCSS3D_AGENT_HPP_
+#define RCSS3D_AGENT__RCSS3D_AGENT_HPP_
 
+#include <thread>
 #include "rclcpp/rclcpp.hpp"
 #include "nao_interfaces/msg/joints.hpp"
 #include "nao_interfaces/msg/buttons.hpp"
@@ -26,62 +27,60 @@
 #include "nao_interfaces/msg/touch.hpp"
 #include "rcss3d_agent/connection.hpp"
 #include "rcss3d_agent/nao_joints_pid.hpp"
-#include <thread>
 #include "rcss3d_agent/complementary_filter.hpp"
 #include "geometry_msgs/msg/point_stamped.hpp"
-
 
 class NaoSoccerSim : public rclcpp::Node
 {
 public:
-    NaoSoccerSim();
-    virtual ~NaoSoccerSim();
+  NaoSoccerSim();
+  virtual ~NaoSoccerSim();
 
 private:
-    // Parameters (things that don't change)
-    // - team number
-    // - player number
-    // - ip
-    // - port
-    // - starting position
+  // Parameters (things that don't change)
+  // - team number
+  // - player number
+  // - ip
+  // - port
+  // - starting position
 
-    // Subscriptions
-    // - JointCommand
-    // - Beam (not for now)
+  // Subscriptions
+  // - JointCommand
+  // - Beam (not for now)
 
-    // Publishers
-    // - Battery (not for sim)
-    // - Buttons
-    // - Joints
-    //   - position
-    //   - stiffness
-    //   - temperature
-    //   - current
-    // - Accelerometer
-    // - Gyroscope
-    // - Angle
-    // - Sonar
-    // - FSR
-    // - Touch
+  // Publishers
+  // - Battery (not for sim)
+  // - Buttons
+  // - Joints
+  //   - position
+  //   - stiffness
+  //   - temperature
+  //   - current
+  // - Accelerometer
+  // - Gyroscope
+  // - Angle
+  // - Sonar
+  // - FSR
+  // - Touch
 
-    rclcpp::Publisher<nao_interfaces::msg::Joints>::SharedPtr joints_pub;
-    rclcpp::Publisher<nao_interfaces::msg::Buttons>::SharedPtr buttons_pub;
-    rclcpp::Publisher<nao_interfaces::msg::Accelerometer>::SharedPtr accelerometer_pub;
-    rclcpp::Publisher<nao_interfaces::msg::Gyroscope>::SharedPtr gyroscope_pub;
-    rclcpp::Publisher<nao_interfaces::msg::Angle>::SharedPtr angle_pub;
-    rclcpp::Publisher<nao_interfaces::msg::Sonar>::SharedPtr sonar_pub;
-    rclcpp::Publisher<nao_interfaces::msg::FSR>::SharedPtr fsr_pub;
-    rclcpp::Publisher<nao_interfaces::msg::Touch>::SharedPtr touch_pub;
-    rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr ball_pub;
+  rclcpp::Publisher<nao_interfaces::msg::Joints>::SharedPtr joints_pub;
+  rclcpp::Publisher<nao_interfaces::msg::Buttons>::SharedPtr buttons_pub;
+  rclcpp::Publisher<nao_interfaces::msg::Accelerometer>::SharedPtr accelerometer_pub;
+  rclcpp::Publisher<nao_interfaces::msg::Gyroscope>::SharedPtr gyroscope_pub;
+  rclcpp::Publisher<nao_interfaces::msg::Angle>::SharedPtr angle_pub;
+  rclcpp::Publisher<nao_interfaces::msg::Sonar>::SharedPtr sonar_pub;
+  rclcpp::Publisher<nao_interfaces::msg::FSR>::SharedPtr fsr_pub;
+  rclcpp::Publisher<nao_interfaces::msg::Touch>::SharedPtr touch_pub;
+  rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr ball_pub;
 
-    rclcpp::Subscription<nao_interfaces::msg::Joints>::SharedPtr joints_sub;
+  rclcpp::Subscription<nao_interfaces::msg::Joints>::SharedPtr joints_sub;
 
-    Connection connection;
+  Connection connection;
 
-    NaoJointsPid naoJointsPid;
-    ComplementaryFilter complementaryFilter;
+  NaoJointsPid naoJointsPid;
+  ComplementaryFilter complementaryFilter;
 
-    std::thread receive_thread_;
+  std::thread receive_thread_;
 };
 
-#endif // NAOSOCCER_SIM
+#endif  // RCSS3D_AGENT__RCSS3D_AGENT_HPP_

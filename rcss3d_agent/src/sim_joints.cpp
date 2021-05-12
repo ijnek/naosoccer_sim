@@ -12,33 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <string>
+#include <utility>
+#include <vector>
 #include "rcss3d_agent/sim_joints.hpp"
 
 SimJoints toSimJoints(std::vector<std::pair<std::string, float>> in)
 {
-    SimJoints simJoints;
+  SimJoints simJoints;
 
-    for (auto const &[name, speed] : in)
-    {
-        auto itr = std::find(jointPerceptorNames.begin(), jointPerceptorNames.end(), name);
-        
-        if (itr != jointPerceptorNames.end())
-        {
-            int idx = itr - jointPerceptorNames.begin();
-            simJoints.at(idx) = speed;
-        }
+  for (auto const &[name, speed] : in) {
+    auto itr = std::find(jointPerceptorNames.begin(), jointPerceptorNames.end(), name);
+
+    if (itr != jointPerceptorNames.end()) {
+      int idx = itr - jointPerceptorNames.begin();
+      simJoints.at(idx) = speed;
     }
-    return simJoints;
+  }
+  return simJoints;
 }
 
-std::vector<std::pair<std::string, float>> fromSimJoints(SimJoints &in)
+std::vector<std::pair<std::string, float>> fromSimJoints(SimJoints & in)
 {
-    std::vector<std::pair<std::string, float>> out;
+  std::vector<std::pair<std::string, float>> out;
 
-    for (unsigned i = 0 ; i < NUM_SIM_JOINTS; ++i)
-    {
-        out.push_back(std::make_pair(jointNames.at(i), in.at(i)));
-    }
+  for (unsigned i = 0; i < NUM_SIM_JOINTS; ++i) {
+    out.push_back(std::make_pair(jointNames.at(i), in.at(i)));
+  }
 
-    return out;
+  return out;
 }

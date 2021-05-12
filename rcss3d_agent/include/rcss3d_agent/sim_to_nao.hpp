@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SIM_TO_NAO_HPP
-#define SIM_TO_NAO_HPP
+#ifndef RCSS3D_AGENT__SIM_TO_NAO_HPP_
+#define RCSS3D_AGENT__SIM_TO_NAO_HPP_
 
-#include "nao_interfaces/msg/joints.hpp"
 #include <map>
+#include <string>
+#include <utility>
+#include <vector>
+#include "nao_interfaces/msg/joints.hpp"
 
-nao_interfaces::msg::Joints sim_to_nao(const std::vector<std::pair<std::string, float>> &sim_joints);
+nao_interfaces::msg::Joints sim_to_nao(
+  const std::vector<std::pair<std::string, float>> & sim_joints);
 
-#endif // SIM_TO_NAO_HPP
+#endif  // RCSS3D_AGENT__SIM_TO_NAO_HPP_

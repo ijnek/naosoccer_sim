@@ -12,35 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef NAOSOCCER_SIM__CONNECTION_HPP
-#define NAOSOCCER_SIM__CONNECTION_HPP
+#ifndef RCSS3D_AGENT__CONNECTION_HPP_
+#define RCSS3D_AGENT__CONNECTION_HPP_
 
 #include <memory>
+#include <string>
+#include <vector>
 #include "rclcpp/rclcpp.hpp"
 #include "rcss3d_agent/socket.hpp"
 
 class Connection
 {
 public:
-    Connection();
+  Connection();
 
-    void initialise(const std::string &host, int port);
+  void initialise(const std::string & host, int port);
 
-    void send(std::string msg);
-    std::string receive();
+  void send(std::string msg);
+  std::string receive();
 
 private:
-    void initSocket(std::string const &host, int port);
-    void connect();
-    void initConnection();
-    uint32_t receive_();
+  void initSocket(std::string const & host, int port);
+  void connect();
+  void initConnection();
+  uint32_t receive_();
 
-    rclcpp::Logger logger;
+  rclcpp::Logger logger;
 
-    Socket socket_;
-    SocketAddress socket_address_;
+  Socket socket_;
+  SocketAddress socket_address_;
 
-    std::vector<char> buffer_;
+  std::vector<char> buffer_;
 };
 
-#endif // NAOSOCCER_SIM__CONNECTION_HPP
+#endif  // RCSS3D_AGENT__CONNECTION_HPP_

@@ -12,24 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef NAO_JOINTS_PID
-#define NAO_JOINTS_PID
+#ifndef RCSS3D_AGENT__NAO_JOINTS_PID_HPP_
+#define RCSS3D_AGENT__NAO_JOINTS_PID_HPP_
 
+#include <vector>
 #include "rcss3d_agent/joint_pid.hpp"
 #include "rcss3d_agent/sim_joints.hpp"
-#include <vector>
 
 class NaoJointsPid
 {
 public:
-    NaoJointsPid();
-    void setTarget(SimJoints target);
+  NaoJointsPid();
+  void setTarget(SimJoints target);
 
-    SimJoints update(SimJoints nextJoints);
+  SimJoints update(SimJoints nextJoints);
 
 private:
-    JointPid<float, NUM_SIM_JOINTS> jointPid;
-    SimJoints target;
+  JointPid<float, NUM_SIM_JOINTS> jointPid;
+  SimJoints target;
 };
 
-#endif // NAO_JOINTS_PID
+#endif  // RCSS3D_AGENT__NAO_JOINTS_PID_HPP_

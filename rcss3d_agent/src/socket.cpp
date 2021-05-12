@@ -15,16 +15,15 @@
 #include "rcss3d_agent/socket.hpp"
 
 Socket::Socket(int _domain, int _type, int _protocol)
-    : refcnt(new unsigned)
+: refcnt(new unsigned)
 {
-    (*refcnt) = 1;
+  (*refcnt) = 1;
 
-    // This is very, very scary, but it doesn't work without it!!??
-    socket_handle = ::socket(_domain, _type, _protocol);
-    socket_handle = ::socket(_domain, _type, _protocol);
+  // This is very, very scary, but it doesn't work without it!!??
+  socket_handle = ::socket(_domain, _type, _protocol);
+  socket_handle = ::socket(_domain, _type, _protocol);
 
-    if (socket_handle == -1)
-    {
-        throw std::runtime_error("error creating the socket");
-    }
+  if (socket_handle == -1) {
+    throw std::runtime_error("error creating the socket");
+  }
 }

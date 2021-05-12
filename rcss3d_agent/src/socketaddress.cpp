@@ -22,19 +22,18 @@
 
 #include "rcss3d_agent/socketaddress.hpp"
 
-void SocketAddress::NSLookup(std::string const &_host_name)
+void SocketAddress::NSLookup(std::string const & _host_name)
 {
-  struct hostent *h = gethostbyname(_host_name.c_str());
+  struct hostent * h = gethostbyname(_host_name.c_str());
 
-  if (!h)
-  {
+  if (!h) {
     throw std::runtime_error(hstrerror(h_errno));
   }
 
   memcpy(&(sock_address.i.sin_addr), *(h->h_addr_list), sizeof(struct in_addr));
 }
 
-void SocketAddress::copy(SocketAddress const &_other)
+void SocketAddress::copy(SocketAddress const & _other)
 {
   memcpy(&sock_address, &(_other.sock_address), sizeof(sock_address));
 }
@@ -49,7 +48,7 @@ SocketAddress::SocketAddress()
   sock_address.i.sin_port = 0;
 }
 
-SocketAddress::SocketAddress(SocketAddress const &_other)
+SocketAddress::SocketAddress(SocketAddress const & _other)
 {
   copy(_other);
 }
@@ -68,7 +67,7 @@ SocketAddress::SocketAddress(int _port, in_addr_t addr)
   sock_address.i.sin_addr.s_addr = addr;
 }
 
-SocketAddress::SocketAddress(int _family, int _port, std::string const &_host_name)
+SocketAddress::SocketAddress(int _family, int _port, std::string const & _host_name)
 {
   sock_address.i.sin_family = _family;
   sock_address.i.sin_port = htons(_port);
@@ -76,7 +75,7 @@ SocketAddress::SocketAddress(int _family, int _port, std::string const &_host_na
   NSLookup(_host_name);
 }
 
-SocketAddress::SocketAddress(int _port, std::string const &_host_name)
+SocketAddress::SocketAddress(int _port, std::string const & _host_name)
 {
   sock_address.i.sin_family = AF_INET;
   sock_address.i.sin_port = htons(_port);
@@ -84,10 +83,9 @@ SocketAddress::SocketAddress(int _port, std::string const &_host_name)
   NSLookup(_host_name);
 }
 
-SocketAddress &SocketAddress::operator=(SocketAddress const &_other)
+SocketAddress & SocketAddress::operator=(SocketAddress const & _other)
 {
-  if (this != &_other)
-  {
+  if (this != &_other) {
     destroy();
     copy(_other);
   }
@@ -99,7 +97,7 @@ SocketAddress::~SocketAddress()
   destroy();
 }
 
-std::ostream &operator<<(std::ostream &_os, const SocketAddress &_sa)
+std::ostream & operator<<(std::ostream & _os, const SocketAddress & _sa)
 {
   _os << inet_ntoa(_sa.sock_address.i.sin_addr);
   _os << ":" << ntohs(_sa.sock_address.i.sin_port);

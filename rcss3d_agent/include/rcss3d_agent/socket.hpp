@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef NAOSOCCER_SIM__SOCKET_HPP_
-#define NAOSOCCER_SIM__SOCKET_HPP_
+#ifndef RCSS3D_AGENT__SOCKET_HPP_
+#define RCSS3D_AGENT__SOCKET_HPP_
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -240,4 +240,4 @@ private:
   }
 };
 
-#endif  // NAOSOCCER_SIM__SOCKET_HPP_
+#endif  // RCSS3D_AGENT__SOCKET_HPP_

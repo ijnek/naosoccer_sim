@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SEXP_CREATOR_HPP
-#define SEXP_CREATOR_HPP
+#ifndef RCSS3D_AGENT__SEXP_CREATOR_HPP_
+#define RCSS3D_AGENT__SEXP_CREATOR_HPP_
 
+#include <utility>
 #include <string>
 #include <vector>
 
 namespace SexpCreator
 {
-    std::string createCreateMessage();
-    std::string createInitMessage(std::string const &team_name, int player_number);
-    std::string createJointMessage(std::vector<std::pair<std::string, float>> cmd);
-    std::string createBeamMessage(double x, double y, double theta);
+std::string createCreateMessage();
+std::string createInitMessage(std::string const & team_name, int player_number);
+std::string createJointMessage(std::vector<std::pair<std::string, float>> cmd);
+std::string createBeamMessage(double x, double y, double theta);
 }
 
-
-#endif // SEXP_CREATOR_HPP
+#endif  // RCSS3D_AGENT__SEXP_CREATOR_HPP_

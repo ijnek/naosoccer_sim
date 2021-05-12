@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SEXP_PARSER_HPP
-#define SEXP_PARSER_HPP
+#ifndef RCSS3D_AGENT__SEXP_PARSER_HPP_
+#define RCSS3D_AGENT__SEXP_PARSER_HPP_
 
 #include <string>
+#include <utility>
+#include <vector>
+#include <tuple>
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -36,29 +39,29 @@
 class SexpParser
 {
 public:
-    SexpParser(std::string msg) 
-        : sexp(sexpresso::parse(msg)), 
-          logger(rclcpp::get_logger("sexp_parser")){}
-    std::vector<std::pair<std::string, float>> getJoints();
-    nao_interfaces::msg::Accelerometer getAccelerometer();
-    nao_interfaces::msg::Gyroscope getGyroscope();
-    nao_interfaces::msg::FSR getFSR();
-    std::tuple<bool, geometry_msgs::msg::PointStamped> getBall();
+  explicit SexpParser(std::string msg)
+  : sexp(sexpresso::parse(msg)),
+    logger(rclcpp::get_logger("sexp_parser")) {}
+  std::vector<std::pair<std::string, float>> getJoints();
+  nao_interfaces::msg::Accelerometer getAccelerometer();
+  nao_interfaces::msg::Gyroscope getGyroscope();
+  nao_interfaces::msg::FSR getFSR();
+  std::tuple<bool, geometry_msgs::msg::PointStamped> getBall();
 
-    // gamestate
-    // observation
-        // ball (geometry_msgs::PointStamped)
-        // goal post
-        // player (geometry_msgs::PoseStamped)
-        // field feature (geometry_msgs::PoseStamped)
-    // true information
-        // my pos
-        // my orien
-        // ball pos
+  // gamestate
+  // observation
+  // ball (geometry_msgs::PointStamped)
+  // goal post
+  // player (geometry_msgs::PoseStamped)
+  // field feature (geometry_msgs::PoseStamped)
+  // true information
+  // my pos
+  // my orien
+  // ball pos
 
 private:
-    sexpresso::Sexp sexp;
-    rclcpp::Logger logger;
+  sexpresso::Sexp sexp;
+  rclcpp::Logger logger;
 };
 
-#endif // SEXP_PARSER_HPP
+#endif  // RCSS3D_AGENT__SEXP_PARSER_HPP_

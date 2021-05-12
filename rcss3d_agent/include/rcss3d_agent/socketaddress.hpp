@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef NAOSOCCER_SIM__SOCKETADDRESS_HPP_
-#define NAOSOCCER_SIM__SOCKETADDRESS_HPP_
+#ifndef RCSS3D_AGENT__SOCKETADDRESS_HPP_
+#define RCSS3D_AGENT__SOCKETADDRESS_HPP_
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -26,35 +26,34 @@
  */
 class SocketAddress
 {
-  friend std::ostream &operator<<(std::ostream &, const SocketAddress &);
+  friend std::ostream & operator<<(std::ostream &, const SocketAddress &);
 
-  union sock
-  {
+  union sock {
     struct sockaddr s;
     struct sockaddr_in i;
   };
 
   sock sock_address;
 
-  void NSLookup(std::string const &_host_name);
+  void NSLookup(std::string const & _host_name);
 
-  void copy(SocketAddress const &_other);
+  void copy(SocketAddress const & _other);
   void destroy();
 
 public:
   SocketAddress();
 
-  explicit SocketAddress(SocketAddress const &_other);
+  explicit SocketAddress(SocketAddress const & _other);
 
   SocketAddress(int _family, int _port, in_addr_t addr = INADDR_ANY);
 
   explicit SocketAddress(int _port, in_addr_t = INADDR_ANY);
 
-  SocketAddress(int _family, int _port, std::string const &_host_name);
+  SocketAddress(int _family, int _port, std::string const & _host_name);
 
-  SocketAddress(int _port, std::string const &_host_name);
+  SocketAddress(int _port, std::string const & _host_name);
 
-  SocketAddress &operator=(SocketAddress const &_other);
+  SocketAddress & operator=(SocketAddress const & _other);
 
   ~SocketAddress();
 
@@ -84,4 +83,4 @@ public:
   }
 };
 
-#endif // NAOSOCCER_SIM__SOCKETADDRESS_HPP_
+#endif  // RCSS3D_AGENT__SOCKETADDRESS_HPP_

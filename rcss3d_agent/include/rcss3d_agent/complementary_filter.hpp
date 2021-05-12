@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef COMPLEMENTARY_FILTER_HPP
-#define COMPLEMENTARY_FILTER_HPP
+#ifndef RCSS3D_AGENT__COMPLEMENTARY_FILTER_HPP_
+#define RCSS3D_AGENT__COMPLEMENTARY_FILTER_HPP_
 
 #include "nao_interfaces/msg/angle.hpp"
 #include "nao_interfaces/msg/accelerometer.hpp"
@@ -29,24 +29,25 @@
 class ComplementaryFilter
 {
 public:
-    ComplementaryFilter(float initial_x, float initial_y)
-        : x_(initial_x), y_(initial_y)
-    {
-    }
+  ComplementaryFilter(float initial_x, float initial_y)
+  : x_(initial_x), y_(initial_y)
+  {
+  }
 
-    ComplementaryFilter()
-        : x_(0.0f), y_(0.0f)
-    {
-    }
+  ComplementaryFilter()
+  : x_(0.0f), y_(0.0f)
+  {
+  }
 
-    nao_interfaces::msg::Angle update(const nao_interfaces::msg::Accelerometer &acc,
-                                      const nao_interfaces::msg::Gyroscope &gyr);
+  nao_interfaces::msg::Angle update(
+    const nao_interfaces::msg::Accelerometer & acc,
+    const nao_interfaces::msg::Gyroscope & gyr);
 
 private:
-    float x_;
-    float y_;
+  float x_;
+  float y_;
 
-    nao_interfaces::msg::Angle getAngle();
+  nao_interfaces::msg::Angle getAngle();
 };
 
-#endif // COMPLEMENTARY_FILTER_HPP
+#endif  // RCSS3D_AGENT__COMPLEMENTARY_FILTER_HPP_

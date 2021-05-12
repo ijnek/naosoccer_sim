@@ -19,17 +19,16 @@
 #define D 0.0
 
 NaoJointsPid::NaoJointsPid()
-    : jointPid(P, I, D)
+: jointPid(P, I, D)
 {}
 
 void NaoJointsPid::setTarget(SimJoints target)
 {
-    this->target = target;
+  this->target = target;
 }
 
 SimJoints NaoJointsPid::update(SimJoints current)
 {
-    SimJoints out = jointPid.update(current, target);
-    return out;
+  SimJoints out = jointPid.update(current, target);
+  return out;
 }
-
