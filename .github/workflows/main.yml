@@ -28,5 +28,5 @@ jobs:
           required-ros-distributions: foxy
       - uses: ros-tooling/action-ros-ci@v0.2
         with:
-          package-name: my_package
+          package-name: joints_to_joint_state nao_button_sim naosoccer_sim_launch rcss3d_agent
           target-ros2-distro: foxy
