@@ -30,4 +30,4 @@ jobs:
         with:
           package-name: joints_to_joint_state nao_button_sim naosoccer_sim_launch rcss3d_agent
           target-ros2-distro: foxy
-          vcs-repo-file-url: naosoccer_sim.repos
+          vcs-repo-file-url: dependencies.repos
