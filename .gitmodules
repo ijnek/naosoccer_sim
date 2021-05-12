@@ -1,5 +1,0 @@
-[submodule "external/sexpresso"]
-	path = rcss3d_agent/external/sexpresso/sexpresso
-	url = https://github.com/BitPuffin/sexpresso.git
-	branch = master
-	ignore = dirty
