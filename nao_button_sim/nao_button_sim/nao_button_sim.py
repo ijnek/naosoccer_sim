@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
 from nao_interfaces.msg import Buttons
 
 from pynput import keyboard
@@ -94,8 +96,52 @@ class ButtonsPublisher(Node):
         msg.r_foot_bumper_right = r_foot_bumper_right
         self.publisher_.publish(msg)
 
+        printStatus([chest, l_foot_bumper_left, l_foot_bumper_right,
+                     r_foot_bumper_left, r_foot_bumper_right])
+
+
+def printStatus(bool_vec):
+    status_str = '|'
+    for b in bool_vec:
+        status_str += '{:^19}|'.format(press_status(b))
+    print(status_str, end='\r')
+
+
+def print_assigned_keys():
+    print('                                 ---------  Assigned Keys  --------'
+          '-                                 ')
+    print('                                      G - Chest button')
+    print('                                      C - Left Foot Bumper Left')
+    print('                                      V - Left Foot Bumper Right')
+    print('                                      B - Right Foot Bumper Left')
+    print('                                      N - Right Foot Bumper Right')
+    print('\n')
+
+
+def print_button_press_status_header():
+    print('---------------------------------------  BUTTON PRESS STATUS  ----'
+          '-----------------------------------')
+
+    print('\n|{:^19}|{:^19}|{:^19}|{:^19}|{:^19}|' .format(
+        'Chest (G)',
+        'LFoot BumperL (C)',
+        'LFoot BumperR (V)',
+        'RFoot BumperL (B)',
+        'RFoot BumperR (N)'))
+    print('==================================================================='
+          '==================================')
+
+
+def press_status(pressed):
+    return 'Pressed' if pressed else ''
+
 
 def main(args=None):
+    os.system('stty -echo')
+
+    print_assigned_keys()
+    print_button_press_status_header()
+
     # listen in a non-blocking fashion:
     listener = keyboard.Listener(
         on_press=on_press,
