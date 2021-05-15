@@ -17,7 +17,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, Shutdown
 from launch.substitutions import LaunchConfiguration
 
 from launch_ros.actions import Node
@@ -43,18 +43,14 @@ def generate_launch_description():
                 'initial_pose_x': LaunchConfiguration('initial_pose_x'),
                 'initial_pose_y': LaunchConfiguration('initial_pose_y'),
                 'initial_pose_theta': LaunchConfiguration('initial_pose_theta')
-            }]
+            }],
+            on_exit=Shutdown()
         ),
-        Node(
-            package='joints_to_joint_state',
-            executable='joints_to_joint_state',
-            namespace=LaunchConfiguration('namespace')
-        ),
-        robot_state_publisher(),
+        nao_state_publisher(),
     ])
 
 
-def robot_state_publisher():
+def nao_state_publisher():
 
     urdf_file_name = 'nao.urdf'
     urdf = os.path.join(
@@ -65,8 +61,8 @@ def robot_state_publisher():
         robot_desc = infp.read()
 
     return Node(
-            package='robot_state_publisher',
-            executable='robot_state_publisher',
+            package='rcss3d_agent',
+            executable='nao_state_publisher',
             namespace=LaunchConfiguration('namespace'),
             output='screen',
             parameters=[{'robot_description': robot_desc}],

@@ -24,6 +24,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(nao_interfaces REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(robot_state_publisher REQUIRED)
 
 # Build rcss3d_agent
 add_library(rcss3d_agent_lib SHARED
@@ -49,14 +50,24 @@ add_executable(rcss3d_agent src/rcss3d_agent_node.cpp)
 
 target_link_libraries(rcss3d_agent rcss3d_agent_lib)
 
+# Build nao_state_publisher
+add_executable(nao_state_publisher src/nao_state_publisher.cpp)
+ament_target_dependencies(nao_state_publisher
+  rclcpp
+  nao_interfaces
+  robot_state_publisher)
+
 # Install
 install(TARGETS
-  rcss3d_agent
+  rcss3d_agent nao_state_publisher
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY include/
   DESTINATION include/
 )
+
+install(DIRECTORY launch/
+    DESTINATION share/${PROJECT_NAME}/launch/)
 
 install(
   TARGETS rcss3d_agent_lib
