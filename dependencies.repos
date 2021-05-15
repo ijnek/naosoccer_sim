@@ -3,7 +3,3 @@ repositories:
     type: git
     url: https://github.com/ijnek/nao_interfaces.git
     version: main
-  nao_description:
-    type: git
-    url: https://github.com/ijnek/nao_description.git
-    version: main

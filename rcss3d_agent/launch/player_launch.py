@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
-from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, Shutdown
 from launch.substitutions import LaunchConfiguration
@@ -46,25 +42,4 @@ def generate_launch_description():
             }],
             on_exit=Shutdown()
         ),
-        nao_state_publisher(),
     ])
-
-
-def nao_state_publisher():
-
-    urdf_file_name = 'nao.urdf'
-    urdf = os.path.join(
-        get_package_share_directory('nao_description'),
-        'urdf',
-        urdf_file_name)
-    with open(urdf, 'r') as infp:
-        robot_desc = infp.read()
-
-    return Node(
-            package='rcss3d_agent',
-            executable='nao_state_publisher',
-            namespace=LaunchConfiguration('namespace'),
-            output='screen',
-            parameters=[{'robot_description': robot_desc}],
-            arguments=[urdf],
-        )
