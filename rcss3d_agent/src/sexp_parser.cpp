@@ -113,8 +113,7 @@ nao_interfaces::msg::FSR SexpParser::getFSR()
 }
 
 
-// Eg. (See (G2R (pol 17.55 -3.33 4.31))
-//          (B (pol 8.51 -0.21 -0.17)))
+// Eg. (See (B (pol 8.51 -0.21 -0.17)))
 std::tuple<bool, geometry_msgs::msg::PointStamped> SexpParser::getBall()
 {
   geometry_msgs::msg::PointStamped ballPoint;
@@ -135,6 +134,8 @@ std::tuple<bool, geometry_msgs::msg::PointStamped> SexpParser::getBall()
 }
 
 
+// Eg. (See (G2R (pol 17.55 -3.33 4.31))
+//          (G1R (pol 17.52 3.27 4.07)))
 std::tuple<bool, naosoccer_interfaces::msg::GoalpostArray> SexpParser::getGoalposts()
 {
   naosoccer_interfaces::msg::GoalpostArray goalpostArray;
@@ -160,6 +161,35 @@ std::tuple<bool, naosoccer_interfaces::msg::GoalpostArray> SexpParser::getGoalpo
   }
 
   return std::make_tuple(goalpostArray.posts.size() > 0, goalpostArray);
+}
+
+// Eg. (See (L (pol 12.11 -40.77 -2.40) (pol 12.95 -37.76 -2.41))
+//          (L (pol 12.97 -37.56 -2.24) (pol 13.32 -32.98 -2.20)))
+std::tuple<bool, naosoccer_interfaces::msg::FieldLineArray> SexpParser::getFieldLines()
+{
+  naosoccer_interfaces::msg::FieldLineArray fieldLineArray;
+
+  for (auto const & arg : sexp.getChildByPath("See")->arguments()) {
+    auto const & s = arg.value.sexp;
+    if (s.at(0).value.str == "L") {
+      naosoccer_interfaces::msg::FieldLine line;
+      line.header.frame_id = "CameraTop_frame";
+
+      line.start = polar_to_point(
+        std::stof(s.at(1).value.sexp.at(1).value.str),
+        deg2rad(std::stof(s.at(1).value.sexp.at(2).value.str)),
+        deg2rad(std::stof(s.at(1).value.sexp.at(3).value.str)));
+
+      line.end = polar_to_point(
+        std::stof(s.at(2).value.sexp.at(1).value.str),
+        deg2rad(std::stof(s.at(2).value.sexp.at(2).value.str)),
+        deg2rad(std::stof(s.at(2).value.sexp.at(3).value.str)));
+
+      fieldLineArray.lines.push_back(line);
+    }
+  }
+
+  return std::make_tuple(fieldLineArray.lines.size() > 0, fieldLineArray);
 }
 
 

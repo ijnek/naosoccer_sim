@@ -71,3 +71,28 @@ TEST(TestSexpParser, TestBall)
   EXPECT_NEAR(ball.point.y, -0.0312, 0.01);
   EXPECT_NEAR(ball.point.z, -0.0252, 0.01);
 }
+
+TEST(TestSexpParser, TestLine)
+{
+  SexpParser parser(sexp);
+  auto [lines_found, lines] = parser.getFieldLines();
+  ASSERT_EQ(lines_found, true);
+
+  naosoccer_interfaces::msg::FieldLine & line1 = lines.lines.at(0);
+  EXPECT_EQ(line1.header.frame_id, "CameraTop_frame");
+  EXPECT_NEAR(line1.start.x, 9.1633, 0.01);
+  EXPECT_NEAR(line1.start.y, -7.9012, 0.01);
+  EXPECT_NEAR(line1.start.z, -0.5071, 0.01);
+  EXPECT_NEAR(line1.end.x, 10.2290, 0.01);
+  EXPECT_NEAR(line1.end.y, -7.9230, 0.01);
+  EXPECT_NEAR(line1.end.z, -0.5445, 0.01);
+
+  naosoccer_interfaces::msg::FieldLine & line2 = lines.lines.at(1);
+  EXPECT_EQ(line2.header.frame_id, "CameraTop_frame");
+  EXPECT_NEAR(line2.start.x, 10.2737, 0.01);
+  EXPECT_NEAR(line2.start.y, -7.9004, 0.01);
+  EXPECT_NEAR(line2.start.z, -0.5069, 0.01);
+  EXPECT_NEAR(line2.end.x, 11.1654, 0.01);
+  EXPECT_NEAR(line2.end.y, -7.2453, 0.01);
+  EXPECT_NEAR(line2.end.z, -0.5113, 0.01);
+}
