@@ -47,6 +47,7 @@ NaoSoccerSim::NaoSoccerSim()
   fsr_pub = create_publisher<nao_interfaces::msg::FSR>("sensors/fsr", 10);
   touch_pub = create_publisher<nao_interfaces::msg::Touch>("sensors/touch", 10);
   ball_pub = create_publisher<geometry_msgs::msg::PointStamped>("vision/ball", 10);
+  posts_pub = create_publisher<naosoccer_interfaces::msg::Goalposts>("vision/posts", 10);
 
   RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
   joints_sub =
@@ -111,6 +112,13 @@ NaoSoccerSim::NaoSoccerSim()
         if (ball_found) {
           ball.header.stamp = now();
           ball_pub->publish(ball);
+        }
+
+        auto [posts_found, posts] = parsed.getGoalposts();
+        if (posts_found) {
+          for (auto &p : posts.posts)
+            p.header.stamp = now();
+          posts_pub->publish(posts);
         }
 
         SimJoints speed_cmd_sim = naoJointsPid.update(toSimJoints(joints));
