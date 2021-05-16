@@ -30,6 +30,7 @@
 #include "nao_interfaces/msg/accelerometer.hpp"
 #include "nao_interfaces/msg/fsr.hpp"
 #include "geometry_msgs/msg/point_stamped.hpp"
+#include "naosoccer_interfaces/msg/goalposts.hpp"
 
 // See https://gitlab.com/robocup-sim/SimSpark/-/wikis/Perceptors#forceresistance-perceptor
 // to figure out which perceptors are available on each cycle, and which are not.
@@ -47,11 +48,11 @@ public:
   nao_interfaces::msg::Gyroscope getGyroscope();
   nao_interfaces::msg::FSR getFSR();
   std::tuple<bool, geometry_msgs::msg::PointStamped> getBall();
+  std::tuple<bool, naosoccer_interfaces::msg::Goalposts> getGoalposts();
 
   // gamestate
   // observation
   // ball (geometry_msgs::PointStamped)
-  // goal post
   // player (geometry_msgs::PoseStamped)
   // field feature (geometry_msgs::PoseStamped)
   // true information
@@ -62,6 +63,8 @@ public:
 private:
   sexpresso::Sexp sexp;
   rclcpp::Logger logger;
+  geometry_msgs::msg::Point polar_to_point(
+    float distance, float horizontal_angle_phi, float vertical_angle_theta);
 };
 
 #endif  // RCSS3D_AGENT__SEXP_PARSER_HPP_

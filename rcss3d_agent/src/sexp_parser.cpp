@@ -124,15 +124,53 @@ std::tuple<bool, geometry_msgs::msg::PointStamped> SexpParser::getBall()
   if (found) {
     RCLCPP_DEBUG(logger, "Found ball information");
 
-    float distance = std::stof(ballSexp->value.sexp.at(1).value.str);
-    float horizontal_angle_phi = deg2rad(std::stof(ballSexp->value.sexp.at(2).value.str));
-    float vertical_angle_theta = deg2rad(std::stof(ballSexp->value.sexp.at(3).value.str));
-
     ballPoint.header.frame_id = "CameraTop_frame";
-    ballPoint.point.x = distance * cos(horizontal_angle_phi) * cos(vertical_angle_theta);
-    ballPoint.point.y = distance * sin(horizontal_angle_phi) * cos(vertical_angle_theta);
-    ballPoint.point.z = distance * sin(vertical_angle_theta);
+    ballPoint.point = polar_to_point(
+      std::stof(ballSexp->value.sexp.at(1).value.str),
+      deg2rad(std::stof(ballSexp->value.sexp.at(2).value.str)),
+      deg2rad(std::stof(ballSexp->value.sexp.at(3).value.str)));
   }
 
   return std::make_tuple(found, ballPoint);
+}
+
+
+std::tuple<bool, naosoccer_interfaces::msg::Goalposts> SexpParser::getGoalposts()
+{
+  naosoccer_interfaces::msg::Goalposts posts;
+
+  for (std::string & postName :
+    std::vector<std::string>{"G1L", "G1R", "G2L", "G2R"})
+  {
+    auto const * postSexp = sexp.getChildByPath("See/" + postName + "/pol");
+    bool found = (postSexp != nullptr);
+    if (found) {
+      RCLCPP_DEBUG(logger, "Found post information");
+
+      naosoccer_interfaces::msg::Goalpost post;
+      post.header.frame_id = "CameraTop_frame";
+      post.observed_top.data = true;
+      post.top = polar_to_point(
+        std::stof(postSexp->value.sexp.at(1).value.str),
+        deg2rad(std::stof(postSexp->value.sexp.at(2).value.str)),
+        deg2rad(std::stof(postSexp->value.sexp.at(3).value.str)));
+
+      posts.posts.push_back(post);
+    }
+  }
+
+  return std::make_tuple(posts.posts.size() > 0, posts);
+}
+
+
+geometry_msgs::msg::Point SexpParser::polar_to_point(
+  float distance, float horizontal_angle_phi, float vertical_angle_theta)
+{
+  geometry_msgs::msg::Point point;
+
+  point.x = distance * cos(horizontal_angle_phi) * cos(vertical_angle_theta);
+  point.y = distance * sin(horizontal_angle_phi) * cos(vertical_angle_theta);
+  point.z = distance * sin(vertical_angle_theta);
+
+  return point;
 }
