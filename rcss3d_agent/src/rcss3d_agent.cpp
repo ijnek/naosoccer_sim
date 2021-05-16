@@ -116,8 +116,9 @@ NaoSoccerSim::NaoSoccerSim()
 
         auto [posts_found, posts] = parsed.getGoalposts();
         if (posts_found) {
-          for (auto &p : posts.posts)
+          for (auto & p : posts.posts) {
             p.header.stamp = now();
+          }
           posts_pub->publish(posts);
         }
 
