@@ -48,16 +48,16 @@ TEST(TestSexpParser, TestGoalPosts)
   naosoccer_interfaces::msg::Goalpost & post1 = goalposts.posts.at(0);
   EXPECT_EQ(post1.header.frame_id, "CameraTop_frame");
   EXPECT_EQ(post1.observed_top.data, true);
-  EXPECT_NEAR(post1.top.x, 17.4473, 0.01);
-  EXPECT_NEAR(post1.top.y, 0.9968, 0.01);
-  EXPECT_NEAR(post1.top.z, 1.2434, 0.01);
+  EXPECT_NEAR(post1.point.x, 17.4473, 0.01);
+  EXPECT_NEAR(post1.point.y, 0.9968, 0.01);
+  EXPECT_NEAR(post1.point.z, 1.2434, 0.01);
 
   naosoccer_interfaces::msg::Goalpost & post2 = goalposts.posts.at(1);
   EXPECT_EQ(post2.header.frame_id, "CameraTop_frame");
   EXPECT_EQ(post2.observed_top.data, true);
-  EXPECT_NEAR(post2.top.x, 17.4708, 0.01);
-  EXPECT_NEAR(post2.top.y, -1.0165, 0.01);
-  EXPECT_NEAR(post2.top.z, 1.3189, 0.01);
+  EXPECT_NEAR(post2.point.x, 17.4708, 0.01);
+  EXPECT_NEAR(post2.point.y, -1.0165, 0.01);
+  EXPECT_NEAR(post2.point.z, 1.3189, 0.01);
 }
 
 TEST(TestSexpParser, TestBall)

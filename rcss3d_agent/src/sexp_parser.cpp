@@ -135,9 +135,9 @@ std::tuple<bool, geometry_msgs::msg::PointStamped> SexpParser::getBall()
 }
 
 
-std::tuple<bool, naosoccer_interfaces::msg::Goalposts> SexpParser::getGoalposts()
+std::tuple<bool, naosoccer_interfaces::msg::GoalpostArray> SexpParser::getGoalposts()
 {
-  naosoccer_interfaces::msg::Goalposts posts;
+  naosoccer_interfaces::msg::GoalpostArray goalpostArray;
 
   for (std::string & postName :
     std::vector<std::string>{"G1L", "G1R", "G2L", "G2R"})
@@ -150,16 +150,16 @@ std::tuple<bool, naosoccer_interfaces::msg::Goalposts> SexpParser::getGoalposts(
       naosoccer_interfaces::msg::Goalpost post;
       post.header.frame_id = "CameraTop_frame";
       post.observed_top.data = true;
-      post.top = polar_to_point(
+      post.point = polar_to_point(
         std::stof(postSexp->value.sexp.at(1).value.str),
         deg2rad(std::stof(postSexp->value.sexp.at(2).value.str)),
         deg2rad(std::stof(postSexp->value.sexp.at(3).value.str)));
 
-      posts.posts.push_back(post);
+      goalpostArray.posts.push_back(post);
     }
   }
 
-  return std::make_tuple(posts.posts.size() > 0, posts);
+  return std::make_tuple(goalpostArray.posts.size() > 0, goalpostArray);
 }
 
 
