@@ -3,3 +3,7 @@ repositories:
     type: git
     url: https://github.com/ijnek/nao_interfaces.git
     version: main
+  naosoccer_interfaces:
+    type: git
+    url: https://github.com/ijnek/naosoccer_interfaces.git
+    version: main
