@@ -136,9 +136,9 @@ std::tuple<bool, geometry_msgs::msg::PointStamped> SexpParser::getBall()
 
 // Eg. (See (G2R (pol 17.55 -3.33 4.31))
 //          (G1R (pol 17.52 3.27 4.07)))
-std::tuple<bool, naosoccer_interfaces::msg::GoalpostArray> SexpParser::getGoalposts()
+std::tuple<bool, soccer_interfaces::msg::GoalpostArray> SexpParser::getGoalposts()
 {
-  naosoccer_interfaces::msg::GoalpostArray goalpostArray;
+  soccer_interfaces::msg::GoalpostArray goalpostArray;
 
   for (std::string & postName :
     std::vector<std::string>{"G1L", "G1R", "G2L", "G2R"})
@@ -148,7 +148,7 @@ std::tuple<bool, naosoccer_interfaces::msg::GoalpostArray> SexpParser::getGoalpo
     if (found) {
       RCLCPP_DEBUG(logger, "Found post information");
 
-      naosoccer_interfaces::msg::Goalpost post;
+      soccer_interfaces::msg::Goalpost post;
       post.header.frame_id = "CameraTop_frame";
       post.observed_top.data = true;
       post.point = polar_to_point(
@@ -165,9 +165,9 @@ std::tuple<bool, naosoccer_interfaces::msg::GoalpostArray> SexpParser::getGoalpo
 
 // Eg. (See (L (pol 12.11 -40.77 -2.40) (pol 12.95 -37.76 -2.41))
 //          (L (pol 12.97 -37.56 -2.24) (pol 13.32 -32.98 -2.20)))
-std::tuple<bool, naosoccer_interfaces::msg::FieldLineArray> SexpParser::getFieldLines()
+std::tuple<bool, soccer_interfaces::msg::FieldLineArray> SexpParser::getFieldLines()
 {
-  naosoccer_interfaces::msg::FieldLineArray fieldLineArray;
+  soccer_interfaces::msg::FieldLineArray fieldLineArray;
 
   auto const * seeSexp = sexp.getChildByPath("See");
   bool seeFound = (seeSexp != nullptr);
@@ -175,7 +175,7 @@ std::tuple<bool, naosoccer_interfaces::msg::FieldLineArray> SexpParser::getField
     for (auto const & arg : sexp.getChildByPath("See")->arguments()) {
       auto const & s = arg.value.sexp;
       if (s.at(0).value.str == "L") {
-        naosoccer_interfaces::msg::FieldLine line;
+        soccer_interfaces::msg::FieldLine line;
         line.header.frame_id = "CameraTop_frame";
 
         line.start = polar_to_point(
@@ -202,9 +202,9 @@ std::tuple<bool, naosoccer_interfaces::msg::FieldLineArray> SexpParser::getField
 //             (llowerarm (pol 16.86 -0.36 3.10))
 //             (rfoot (pol 17.00 0.29 1.68))
 //             (lfoot (pol 16.95 -0.51 1.32))))
-std::tuple<bool, naosoccer_interfaces::msg::RobotArray> SexpParser::getRobots()
+std::tuple<bool, soccer_interfaces::msg::RobotArray> SexpParser::getRobots()
 {
-  naosoccer_interfaces::msg::RobotArray robotArray;
+  soccer_interfaces::msg::RobotArray robotArray;
 
   auto * seeSexp = sexp.getChildByPath("See");
   bool seeFound = (seeSexp != nullptr);
@@ -221,7 +221,7 @@ std::tuple<bool, naosoccer_interfaces::msg::RobotArray> SexpParser::getRobots()
         continue;
       }
 
-      naosoccer_interfaces::msg::Robot robot;
+      soccer_interfaces::msg::Robot robot;
       robot.header.frame_id = "CameraTop_frame";
       robot.team = arg.getChildByPath("team")->value.sexp.at(1).value.str;
       robot.id = std::stoi(arg.getChildByPath("id")->value.sexp.at(1).value.str);

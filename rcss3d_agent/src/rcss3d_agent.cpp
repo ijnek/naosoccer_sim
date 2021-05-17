@@ -47,9 +47,9 @@ NaoSoccerSim::NaoSoccerSim()
   fsr_pub = create_publisher<nao_interfaces::msg::FSR>("sensors/fsr", 10);
   touch_pub = create_publisher<nao_interfaces::msg::Touch>("sensors/touch", 10);
   ball_pub = create_publisher<geometry_msgs::msg::PointStamped>("vision/ball", 10);
-  posts_pub = create_publisher<naosoccer_interfaces::msg::GoalpostArray>("vision/goalposts", 10);
-  lines_pub = create_publisher<naosoccer_interfaces::msg::FieldLineArray>("vision/field_lines", 10);
-  robots_pub = create_publisher<naosoccer_interfaces::msg::RobotArray>("vision/robots", 10);
+  posts_pub = create_publisher<soccer_interfaces::msg::GoalpostArray>("vision/goalposts", 10);
+  lines_pub = create_publisher<soccer_interfaces::msg::FieldLineArray>("vision/field_lines", 10);
+  robots_pub = create_publisher<soccer_interfaces::msg::RobotArray>("vision/robots", 10);
 
   RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
   joints_sub =

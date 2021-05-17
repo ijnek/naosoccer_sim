@@ -30,9 +30,9 @@
 #include "nao_interfaces/msg/accelerometer.hpp"
 #include "nao_interfaces/msg/fsr.hpp"
 #include "geometry_msgs/msg/point_stamped.hpp"
-#include "naosoccer_interfaces/msg/goalpost_array.hpp"
-#include "naosoccer_interfaces/msg/field_line_array.hpp"
-#include "naosoccer_interfaces/msg/robot_array.hpp"
+#include "soccer_interfaces/msg/goalpost_array.hpp"
+#include "soccer_interfaces/msg/field_line_array.hpp"
+#include "soccer_interfaces/msg/robot_array.hpp"
 
 // See https://gitlab.com/robocup-sim/SimSpark/-/wikis/Perceptors#forceresistance-perceptor
 // to figure out which perceptors are available on each cycle, and which are not.
@@ -50,9 +50,9 @@ public:
   nao_interfaces::msg::Gyroscope getGyroscope();
   nao_interfaces::msg::FSR getFSR();
   std::tuple<bool, geometry_msgs::msg::PointStamped> getBall();
-  std::tuple<bool, naosoccer_interfaces::msg::GoalpostArray> getGoalposts();
-  std::tuple<bool, naosoccer_interfaces::msg::FieldLineArray> getFieldLines();
-  std::tuple<bool, naosoccer_interfaces::msg::RobotArray> getRobots();
+  std::tuple<bool, soccer_interfaces::msg::GoalpostArray> getGoalposts();
+  std::tuple<bool, soccer_interfaces::msg::FieldLineArray> getFieldLines();
+  std::tuple<bool, soccer_interfaces::msg::RobotArray> getRobots();
 
   // gamestate
   // observation

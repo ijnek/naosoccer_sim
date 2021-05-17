@@ -29,9 +29,9 @@
 #include "rcss3d_agent/nao_joints_pid.hpp"
 #include "rcss3d_agent/complementary_filter.hpp"
 #include "geometry_msgs/msg/point_stamped.hpp"
-#include "naosoccer_interfaces/msg/goalpost_array.hpp"
-#include "naosoccer_interfaces/msg/field_line_array.hpp"
-#include "naosoccer_interfaces/msg/robot_array.hpp"
+#include "soccer_interfaces/msg/goalpost_array.hpp"
+#include "soccer_interfaces/msg/field_line_array.hpp"
+#include "soccer_interfaces/msg/robot_array.hpp"
 
 class NaoSoccerSim : public rclcpp::Node
 {
@@ -75,9 +75,9 @@ private:
   rclcpp::Publisher<nao_interfaces::msg::FSR>::SharedPtr fsr_pub;
   rclcpp::Publisher<nao_interfaces::msg::Touch>::SharedPtr touch_pub;
   rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr ball_pub;
-  rclcpp::Publisher<naosoccer_interfaces::msg::GoalpostArray>::SharedPtr posts_pub;
-  rclcpp::Publisher<naosoccer_interfaces::msg::FieldLineArray>::SharedPtr lines_pub;
-  rclcpp::Publisher<naosoccer_interfaces::msg::RobotArray>::SharedPtr robots_pub;
+  rclcpp::Publisher<soccer_interfaces::msg::GoalpostArray>::SharedPtr posts_pub;
+  rclcpp::Publisher<soccer_interfaces::msg::FieldLineArray>::SharedPtr lines_pub;
+  rclcpp::Publisher<soccer_interfaces::msg::RobotArray>::SharedPtr robots_pub;
 
   rclcpp::Subscription<nao_interfaces::msg::Joints>::SharedPtr joints_sub;
 

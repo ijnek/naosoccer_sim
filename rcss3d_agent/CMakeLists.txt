@@ -24,7 +24,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(nao_interfaces REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(naosoccer_interfaces REQUIRED)
+find_package(soccer_interfaces REQUIRED)
 
 # Build rcss3d_agent
 add_library(rcss3d_agent_lib SHARED
@@ -45,7 +45,7 @@ ament_target_dependencies(rcss3d_agent_lib
   rclcpp
   nao_interfaces
   geometry_msgs
-  naosoccer_interfaces)
+  soccer_interfaces)
 
 add_executable(rcss3d_agent src/rcss3d_agent_node.cpp)
 
