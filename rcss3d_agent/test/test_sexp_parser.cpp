@@ -35,9 +35,10 @@ static const char * sexp =
   "(L (pol 12.11 -40.77 -2.40) (pol 12.95 -37.76 -2.41)) "
   "(L (pol 12.97 -37.56 -2.24) (pol 13.32 -32.98 -2.20)))";
 
-// static const std::string sexp = "(See (B (pol 8.51 -0.21 -0.17)))";
+static const char * sexp_empty = "(See )";
+static const char * sexp_none = "";
 
-TEST(TestSexpParser, TestGoalPosts)
+TEST(TestGoalposts, TestHasGoalposts)
 {
   SexpParser parser(sexp);
   auto [found, goalposts] = parser.getGoalposts();
@@ -60,7 +61,21 @@ TEST(TestSexpParser, TestGoalPosts)
   EXPECT_NEAR(post2.point.z, 1.3189, 0.01);
 }
 
-TEST(TestSexpParser, TestBall)
+TEST(TestGoalposts, TestNoGoalposts)
+{
+  SexpParser parser(sexp_empty);
+  auto [found, goalposts] = parser.getGoalposts();
+  ASSERT_EQ(found, false);
+}
+
+TEST(TestGoalposts, TestNoVisionData)
+{
+  SexpParser parser(sexp_none);
+  auto [found, goalposts] = parser.getGoalposts();
+  ASSERT_EQ(found, false);
+}
+
+TEST(TestBall, TestHasBall)
 {
   SexpParser parser(sexp);
   auto [ball_found, ball] = parser.getBall();
@@ -72,7 +87,21 @@ TEST(TestSexpParser, TestBall)
   EXPECT_NEAR(ball.point.z, -0.0252, 0.01);
 }
 
-TEST(TestSexpParser, TestLine)
+TEST(TestBall, TestNoBall)
+{
+  SexpParser parser(sexp_empty);
+  auto [found, ball] = parser.getBall();
+  ASSERT_EQ(found, false);
+}
+
+TEST(TestBall, TestNoVisionData)
+{
+  SexpParser parser(sexp_none);
+  auto [found, ball] = parser.getBall();
+  ASSERT_EQ(found, false);
+}
+
+TEST(TestFieldLines, TestHasFieldLines)
 {
   SexpParser parser(sexp);
   auto [lines_found, lines] = parser.getFieldLines();
@@ -95,4 +124,18 @@ TEST(TestSexpParser, TestLine)
   EXPECT_NEAR(line2.end.x, 11.1654, 0.01);
   EXPECT_NEAR(line2.end.y, -7.2453, 0.01);
   EXPECT_NEAR(line2.end.z, -0.5113, 0.01);
+}
+
+TEST(TestFieldLines, TestNoFieldLines)
+{
+  SexpParser parser(sexp_empty);
+  auto [found, lines] = parser.getFieldLines();
+  ASSERT_EQ(found, false);
+}
+
+TEST(TestFieldLines, TestNoVisionData)
+{
+  SexpParser parser(sexp_none);
+  auto [found, lines] = parser.getFieldLines();
+  ASSERT_EQ(found, false);
 }

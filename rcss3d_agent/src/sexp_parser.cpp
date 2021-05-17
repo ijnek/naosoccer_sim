@@ -169,23 +169,28 @@ std::tuple<bool, naosoccer_interfaces::msg::FieldLineArray> SexpParser::getField
 {
   naosoccer_interfaces::msg::FieldLineArray fieldLineArray;
 
-  for (auto const & arg : sexp.getChildByPath("See")->arguments()) {
-    auto const & s = arg.value.sexp;
-    if (s.at(0).value.str == "L") {
-      naosoccer_interfaces::msg::FieldLine line;
-      line.header.frame_id = "CameraTop_frame";
+  auto const * seeSexp = sexp.getChildByPath("See");
+  bool seeFound = (seeSexp != nullptr);
+  if (seeFound)
+  {
+    for (auto const & arg : sexp.getChildByPath("See")->arguments()) {
+      auto const & s = arg.value.sexp;
+      if (s.at(0).value.str == "L") {
+        naosoccer_interfaces::msg::FieldLine line;
+        line.header.frame_id = "CameraTop_frame";
 
-      line.start = polar_to_point(
-        std::stof(s.at(1).value.sexp.at(1).value.str),
-        deg2rad(std::stof(s.at(1).value.sexp.at(2).value.str)),
-        deg2rad(std::stof(s.at(1).value.sexp.at(3).value.str)));
+        line.start = polar_to_point(
+          std::stof(s.at(1).value.sexp.at(1).value.str),
+          deg2rad(std::stof(s.at(1).value.sexp.at(2).value.str)),
+          deg2rad(std::stof(s.at(1).value.sexp.at(3).value.str)));
 
-      line.end = polar_to_point(
-        std::stof(s.at(2).value.sexp.at(1).value.str),
-        deg2rad(std::stof(s.at(2).value.sexp.at(2).value.str)),
-        deg2rad(std::stof(s.at(2).value.sexp.at(3).value.str)));
+        line.end = polar_to_point(
+          std::stof(s.at(2).value.sexp.at(1).value.str),
+          deg2rad(std::stof(s.at(2).value.sexp.at(2).value.str)),
+          deg2rad(std::stof(s.at(2).value.sexp.at(3).value.str)));
 
-      fieldLineArray.lines.push_back(line);
+        fieldLineArray.lines.push_back(line);
+      }
     }
   }
 
