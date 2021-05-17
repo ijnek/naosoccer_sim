@@ -171,8 +171,7 @@ std::tuple<bool, naosoccer_interfaces::msg::FieldLineArray> SexpParser::getField
 
   auto const * seeSexp = sexp.getChildByPath("See");
   bool seeFound = (seeSexp != nullptr);
-  if (seeFound)
-  {
+  if (seeFound) {
     for (auto const & arg : sexp.getChildByPath("See")->arguments()) {
       auto const & s = arg.value.sexp;
       if (s.at(0).value.str == "L") {
