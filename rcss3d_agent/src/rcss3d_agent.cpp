@@ -31,10 +31,10 @@ NaoSoccerSim::NaoSoccerSim()
   this->declare_parameter<std::string>("host", "127.0.0.1");
   this->declare_parameter<int>("port", 3100);
   this->declare_parameter<std::string>("team", "Anonymous");
-  this->declare_parameter<int>("player_number", 0);
-  this->declare_parameter<double>("initial_pose_x", 0.0);
-  this->declare_parameter<double>("initial_pose_y", 0.0);
-  this->declare_parameter<double>("initial_pose_theta", 0.0);
+  this->declare_parameter<int>("number", 2);
+  this->declare_parameter<double>("x", 0.0);
+  this->declare_parameter<double>("y", 0.0);
+  this->declare_parameter<double>("theta", 0.0);
 
   RCLCPP_DEBUG(get_logger(), "Initialise publishers");
   joints_pub = create_publisher<nao_interfaces::msg::Joints>("sensors/joints", 10);
@@ -76,7 +76,7 @@ NaoSoccerSim::NaoSoccerSim()
   // Send init
   connection.send(
     SexpCreator::createInitMessage(
-      get_parameter("team").as_string(), get_parameter("player_number").as_int()));
+      get_parameter("team").as_string(), get_parameter("number").as_int()));
 
   // Receive, this is needed for the beam message to be sent next
   connection.receive();
@@ -84,9 +84,9 @@ NaoSoccerSim::NaoSoccerSim()
   // Send beam
   connection.send(
     SexpCreator::createBeamMessage(
-      get_parameter("initial_pose_x").as_double(),
-      get_parameter("initial_pose_y").as_double(),
-      get_parameter("initial_pose_theta").as_double()));
+      get_parameter("x").as_double(),
+      get_parameter("y").as_double(),
+      get_parameter("theta").as_double()));
 
   // Start receive and send loop
   receive_thread_ = std::thread(

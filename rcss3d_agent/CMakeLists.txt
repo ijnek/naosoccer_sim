@@ -60,9 +60,6 @@ install(DIRECTORY include/
   DESTINATION include/
 )
 
-install(DIRECTORY launch/
-    DESTINATION share/${PROJECT_NAME}/launch/)
-
 install(
   TARGETS rcss3d_agent_lib
   EXPORT export_${PROJECT_NAME}

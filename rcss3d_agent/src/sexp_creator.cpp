@@ -49,12 +49,12 @@ std::string createCreateMessage()
   return createMessage(sceneSexp);
 }
 
-std::string createInitMessage(std::string const & team_name, int player_number)
+std::string createInitMessage(std::string const & team_name, int number)
 {
   auto initSexp = sexpresso::Sexp{"init"};
 
   auto unumSexp = sexpresso::Sexp{"unum"};
-  unumSexp.addChild(std::to_string(player_number));
+  unumSexp.addChild(std::to_string(number));
   initSexp.addChild(std::move(unumSexp));
 
   auto teamSexp = sexpresso::Sexp{"teamname"};
