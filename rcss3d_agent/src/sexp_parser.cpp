@@ -150,7 +150,7 @@ std::tuple<bool, soccer_interfaces::msg::GoalpostArray> SexpParser::getGoalposts
 
       soccer_interfaces::msg::Goalpost post;
       post.header.frame_id = "CameraTop_frame";
-      post.observed_top.data = true;
+      post.observed_top = true;
       post.point = polar_to_point(
         std::stof(postSexp->value.sexp.at(1).value.str),
         deg2rad(std::stof(postSexp->value.sexp.at(2).value.str)),

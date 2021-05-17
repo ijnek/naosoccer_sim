@@ -48,14 +48,14 @@ TEST(TestGoalposts, TestHasGoalposts)
   // Check in order of: G1L, G1R, G2L, G2R
   soccer_interfaces::msg::Goalpost & post1 = goalposts.posts.at(0);
   EXPECT_EQ(post1.header.frame_id, "CameraTop_frame");
-  EXPECT_EQ(post1.observed_top.data, true);
+  EXPECT_EQ(post1.observed_top, true);
   EXPECT_NEAR(post1.point.x, 17.4473, 0.01);
   EXPECT_NEAR(post1.point.y, 0.9968, 0.01);
   EXPECT_NEAR(post1.point.z, 1.2434, 0.01);
 
   soccer_interfaces::msg::Goalpost & post2 = goalposts.posts.at(1);
   EXPECT_EQ(post2.header.frame_id, "CameraTop_frame");
-  EXPECT_EQ(post2.observed_top.data, true);
+  EXPECT_EQ(post2.observed_top, true);
   EXPECT_NEAR(post2.point.x, 17.4708, 0.01);
   EXPECT_NEAR(post2.point.y, -1.0165, 0.01);
   EXPECT_NEAR(post2.point.z, 1.3189, 0.01);
