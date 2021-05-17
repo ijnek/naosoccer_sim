@@ -196,6 +196,49 @@ std::tuple<bool, naosoccer_interfaces::msg::FieldLineArray> SexpParser::getField
   return std::make_tuple(fieldLineArray.lines.size() > 0, fieldLineArray);
 }
 
+// Eg. (See (P (team teamRed) (id 1)
+//             (head (pol 16.98 -0.21 3.19))
+//             (rlowerarm (pol 16.83 -0.06 2.80))
+//             (llowerarm (pol 16.86 -0.36 3.10))
+//             (rfoot (pol 17.00 0.29 1.68))
+//             (lfoot (pol 16.95 -0.51 1.32))))
+std::tuple<bool, naosoccer_interfaces::msg::RobotArray> SexpParser::getRobots()
+{
+  naosoccer_interfaces::msg::RobotArray robotArray;
+
+  auto * seeSexp = sexp.getChildByPath("See");
+  bool seeFound = (seeSexp != nullptr);
+  if (seeFound) {
+    for (auto & arg : seeSexp->arguments()) {
+      // Ignore if its not player info
+      if (arg.value.sexp.at(0).value.str != "P") {
+        continue;
+      }
+
+      // Ignore if we don't have head info
+      auto * player_head = arg.getChildByPath("head");
+      if (player_head == nullptr) {
+        continue;
+      }
+
+      naosoccer_interfaces::msg::Robot robot;
+      robot.header.frame_id = "CameraTop_frame";
+      robot.team = arg.getChildByPath("team")->value.sexp.at(1).value.str;
+      robot.id = std::stoi(arg.getChildByPath("id")->value.sexp.at(1).value.str);
+
+      auto & pol = arg.getChildByPath("head/pol")->value.sexp;
+      robot.head = polar_to_point(
+        std::stof(pol.at(1).value.str),
+        deg2rad(std::stof(pol.at(2).value.str)),
+        deg2rad(std::stof(pol.at(3).value.str)));
+
+      robotArray.robots.push_back(robot);
+    }
+  }
+
+  return std::make_tuple(robotArray.robots.size() > 0, robotArray);
+}
+
 
 geometry_msgs::msg::Point SexpParser::polar_to_point(
   float distance, float horizontal_angle_phi, float vertical_angle_theta)

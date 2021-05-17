@@ -106,6 +106,7 @@ TEST(TestFieldLines, TestHasFieldLines)
   SexpParser parser(sexp);
   auto [lines_found, lines] = parser.getFieldLines();
   ASSERT_EQ(lines_found, true);
+  ASSERT_EQ(lines.lines.size(), 2u);
 
   naosoccer_interfaces::msg::FieldLine & line1 = lines.lines.at(0);
   EXPECT_EQ(line1.header.frame_id, "CameraTop_frame");
@@ -137,5 +138,38 @@ TEST(TestFieldLines, TestNoVisionData)
 {
   SexpParser parser(sexp_none);
   auto [found, lines] = parser.getFieldLines();
+  ASSERT_EQ(found, false);
+}
+
+TEST(TestRobots, TestHasRobots)
+{
+  // Currently, WE ONLY DETECT THE "HEAD" of the robot
+  // If a limb is sent, we ignore it. That's why the
+  // second robot is not counted as a robot in thie test.
+  SexpParser parser(sexp);
+  auto [found, robots] = parser.getRobots();
+  ASSERT_EQ(found, true);
+  ASSERT_EQ(robots.robots.size(), 1u);
+
+  naosoccer_interfaces::msg::Robot & robot1 = robots.robots.at(0);
+  EXPECT_EQ(robot1.header.frame_id, "CameraTop_frame");
+  EXPECT_EQ(robot1.team, "teamRed");
+  EXPECT_EQ(robot1.id, 1);
+  EXPECT_NEAR(robot1.head.x, 16.9536, 0.01);
+  EXPECT_NEAR(robot1.head.y, -0.0621, 0.01);
+  EXPECT_NEAR(robot1.head.z, 0.9449, 0.01);
+}
+
+TEST(TestRobots, TestNoFieldLines)
+{
+  SexpParser parser(sexp_empty);
+  auto [found, robots] = parser.getRobots();
+  ASSERT_EQ(found, false);
+}
+
+TEST(TestRobots, TestNoVisionData)
+{
+  SexpParser parser(sexp_none);
+  auto [found, robots] = parser.getRobots();
   ASSERT_EQ(found, false);
 }

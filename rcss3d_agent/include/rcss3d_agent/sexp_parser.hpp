@@ -32,6 +32,7 @@
 #include "geometry_msgs/msg/point_stamped.hpp"
 #include "naosoccer_interfaces/msg/goalpost_array.hpp"
 #include "naosoccer_interfaces/msg/field_line_array.hpp"
+#include "naosoccer_interfaces/msg/robot_array.hpp"
 
 // See https://gitlab.com/robocup-sim/SimSpark/-/wikis/Perceptors#forceresistance-perceptor
 // to figure out which perceptors are available on each cycle, and which are not.
@@ -51,11 +52,10 @@ public:
   std::tuple<bool, geometry_msgs::msg::PointStamped> getBall();
   std::tuple<bool, naosoccer_interfaces::msg::GoalpostArray> getGoalposts();
   std::tuple<bool, naosoccer_interfaces::msg::FieldLineArray> getFieldLines();
+  std::tuple<bool, naosoccer_interfaces::msg::RobotArray> getRobots();
 
   // gamestate
   // observation
-  // ball (geometry_msgs::PointStamped)
-  // player (geometry_msgs::PoseStamped)
   // field feature (geometry_msgs::PoseStamped)
   // true information
   // my pos
