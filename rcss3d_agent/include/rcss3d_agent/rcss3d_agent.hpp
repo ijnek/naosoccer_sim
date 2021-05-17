@@ -30,6 +30,7 @@
 #include "rcss3d_agent/complementary_filter.hpp"
 #include "geometry_msgs/msg/point_stamped.hpp"
 #include "naosoccer_interfaces/msg/goalpost_array.hpp"
+#include "naosoccer_interfaces/msg/field_line_array.hpp"
 
 class NaoSoccerSim : public rclcpp::Node
 {
@@ -74,6 +75,7 @@ private:
   rclcpp::Publisher<nao_interfaces::msg::Touch>::SharedPtr touch_pub;
   rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr ball_pub;
   rclcpp::Publisher<naosoccer_interfaces::msg::GoalpostArray>::SharedPtr posts_pub;
+  rclcpp::Publisher<naosoccer_interfaces::msg::FieldLineArray>::SharedPtr lines_pub;
 
   rclcpp::Subscription<nao_interfaces::msg::Joints>::SharedPtr joints_sub;
 
