@@ -49,6 +49,7 @@ NaoSoccerSim::NaoSoccerSim()
   ball_pub = create_publisher<geometry_msgs::msg::PointStamped>("vision/ball", 10);
   posts_pub = create_publisher<naosoccer_interfaces::msg::GoalpostArray>("vision/goalposts", 10);
   lines_pub = create_publisher<naosoccer_interfaces::msg::FieldLineArray>("vision/field_lines", 10);
+  robots_pub = create_publisher<naosoccer_interfaces::msg::RobotArray>("vision/robots", 10);
 
   RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
   joints_sub =
@@ -125,10 +126,18 @@ NaoSoccerSim::NaoSoccerSim()
 
         auto [lines_found, lines] = parsed.getFieldLines();
         if (lines_found) {
-          for (auto & p : lines.lines) {
-            p.header.stamp = now();
+          for (auto & l : lines.lines) {
+            l.header.stamp = now();
           }
           lines_pub->publish(lines);
+        }
+
+        auto [robots_found, robots] = parsed.getRobots();
+        if (robots_found) {
+          for (auto & r : robots.robots) {
+            r.header.stamp = now();
+          }
+          robots_pub->publish(robots);
         }
 
         SimJoints speed_cmd_sim = naoJointsPid.update(toSimJoints(joints));
