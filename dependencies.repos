@@ -5,5 +5,5 @@ repositories:
     version: main
   soccer_vision_msgs:
     type: git
-    url: https://github.com/ijnek/soccer_vision_msgs.git
+    url: https://github.com/ijnek/soccer_interfaces.git
     version: main
