@@ -46,14 +46,14 @@ TEST(TestGoalposts, TestHasGoalposts)
   ASSERT_EQ(goalposts.posts.size(), 2u);
 
   // Check in order of: G1L, G1R, G2L, G2R
-  soccer_interfaces::msg::Goalpost & post1 = goalposts.posts.at(0);
+  soccer_vision_msgs::msg::Goalpost & post1 = goalposts.posts.at(0);
   EXPECT_EQ(post1.header.frame_id, "CameraTop_frame");
   EXPECT_EQ(post1.observed_top, true);
   EXPECT_NEAR(post1.point.x, 17.4473, 0.01);
   EXPECT_NEAR(post1.point.y, 0.9968, 0.01);
   EXPECT_NEAR(post1.point.z, 1.2434, 0.01);
 
-  soccer_interfaces::msg::Goalpost & post2 = goalposts.posts.at(1);
+  soccer_vision_msgs::msg::Goalpost & post2 = goalposts.posts.at(1);
   EXPECT_EQ(post2.header.frame_id, "CameraTop_frame");
   EXPECT_EQ(post2.observed_top, true);
   EXPECT_NEAR(post2.point.x, 17.4708, 0.01);
@@ -108,7 +108,7 @@ TEST(TestFieldLines, TestHasFieldLines)
   ASSERT_EQ(lines_found, true);
   ASSERT_EQ(lines.lines.size(), 2u);
 
-  soccer_interfaces::msg::FieldLine & line1 = lines.lines.at(0);
+  soccer_vision_msgs::msg::FieldLine & line1 = lines.lines.at(0);
   EXPECT_EQ(line1.header.frame_id, "CameraTop_frame");
   EXPECT_NEAR(line1.start.x, 9.1633, 0.01);
   EXPECT_NEAR(line1.start.y, -7.9012, 0.01);
@@ -117,7 +117,7 @@ TEST(TestFieldLines, TestHasFieldLines)
   EXPECT_NEAR(line1.end.y, -7.9230, 0.01);
   EXPECT_NEAR(line1.end.z, -0.5445, 0.01);
 
-  soccer_interfaces::msg::FieldLine & line2 = lines.lines.at(1);
+  soccer_vision_msgs::msg::FieldLine & line2 = lines.lines.at(1);
   EXPECT_EQ(line2.header.frame_id, "CameraTop_frame");
   EXPECT_NEAR(line2.start.x, 10.2737, 0.01);
   EXPECT_NEAR(line2.start.y, -7.9004, 0.01);
@@ -151,7 +151,7 @@ TEST(TestRobots, TestHasRobots)
   ASSERT_EQ(found, true);
   ASSERT_EQ(robots.robots.size(), 1u);
 
-  soccer_interfaces::msg::Robot & robot1 = robots.robots.at(0);
+  soccer_vision_msgs::msg::Robot & robot1 = robots.robots.at(0);
   EXPECT_EQ(robot1.header.frame_id, "CameraTop_frame");
   EXPECT_EQ(robot1.team, "teamRed");
   EXPECT_EQ(robot1.id, 1);
