@@ -93,7 +93,7 @@ NaoSoccerSim::NaoSoccerSim()
     [this]() {
       while (rclcpp::ok()) {
         std::string recv = connection.receive();
-        RCLCPP_DEBUG(this->get_logger(), "Received: " + recv);
+        RCLCPP_DEBUG(this->get_logger(), ("Received: " + recv).c_str());
 
         SexpParser parsed(recv);
 
@@ -142,7 +142,7 @@ NaoSoccerSim::NaoSoccerSim()
 
         SimJoints speed_cmd_sim = naoJointsPid.update(toSimJoints(joints));
         std::string msg = SexpCreator::createJointMessage(fromSimJoints(speed_cmd_sim));
-        RCLCPP_DEBUG(this->get_logger(), "Sending: " + msg);
+        RCLCPP_DEBUG(this->get_logger(), ("Sending: " + msg).c_str());
         connection.send(msg);
       }
     });

@@ -104,7 +104,7 @@ nao_interfaces::msg::FSR SexpParser::getFSR()
         fsrMsg.r_foot_back_left = rf_val;
         fsrMsg.r_foot_back_right = rf_val;
       } else {
-        RCLCPP_ERROR(logger, "Received Unknown FRP with name: " + frp_name);
+        RCLCPP_ERROR(logger, ("Received Unknown FRP with name: " + frp_name).c_str());
       }
     }
   }

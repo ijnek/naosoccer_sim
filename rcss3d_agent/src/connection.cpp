@@ -33,7 +33,7 @@ void Connection::initialise(const std::string & host, int port)
 
 void Connection::send(std::string msg)
 {
-  RCLCPP_DEBUG(logger, std::string{"Sending: "} + msg);
+  RCLCPP_DEBUG(logger, (std::string{"Sending: "} + msg).c_str());
 
   auto len = htonl(msg.length());
 
@@ -70,14 +70,14 @@ void Connection::initConnection()
 std::string Connection::receive()
 {
   // Read new message
-  RCLCPP_DEBUG(logger, std::string{"Starting receive"});
+  RCLCPP_DEBUG(logger, "Starting receive");
   auto len = receive_();
-  RCLCPP_DEBUG(logger, std::string{"Received: "} + std::to_string(len));
+  RCLCPP_DEBUG(logger, ("Received: " + std::to_string(len)).c_str());
   if (len == 0) {
     return "";
   }
   auto msg = std::string{buffer_.data()};
-  RCLCPP_DEBUG(logger, std::string{"Received: "} + msg);
+  RCLCPP_DEBUG(logger, (std::string{"Received: "} + msg).c_str());
   return msg;
 }
 
