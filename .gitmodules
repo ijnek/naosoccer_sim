@@ -1,5 +1,5 @@
 [submodule "rcss3d_agent/external/sexpresso"]
 	path = rcss3d_agent/external/sexpresso
-	url = https://github.com/BitPuffin/sexpresso.git
-	branch = master
+	url = https://github.com/ijnek/sexpresso.git
+	branch = eliminate-Wall-Wextra-warnings
 	ignore = dirty
