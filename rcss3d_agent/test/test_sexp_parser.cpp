@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <gtest/gtest.h>
+#include <string>
 #include "rcss3d_agent/sexp_parser.hpp"
 
 // Taken from https://gitlab.com/robocup-sim/SimSpark/-/wikis/Perceptors#vision-perceptors
@@ -172,4 +173,17 @@ TEST(TestRobots, TestNoVisionData)
   SexpParser parser(sexp_none);
   auto [found, robots] = parser.getRobots();
   ASSERT_EQ(found, false);
+}
+
+TEST(TestFSR, TestLeft)
+{
+  std::string str =
+    "(FRP (n lf) (c 0.00 -0.01 -0.01) (f -0.2 0.00 22.67))"
+    "(FRP (n rf) (c 0.00 -0.01 -0.01) (f -0.2 0.00 22.67))";
+  SexpParser parser(str);
+  nao_interfaces::msg::FSR fsr = parser.getFSR();
+  EXPECT_GT(fsr.l_foot_front_left, 0);
+  EXPECT_GT(fsr.l_foot_front_right, 0);
+  EXPECT_GT(fsr.l_foot_back_left, 0);
+  EXPECT_GT(fsr.l_foot_back_right, 0);
 }

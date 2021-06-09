@@ -18,6 +18,7 @@
 #include <tuple>
 #include "rcss3d_agent/sexp_parser.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "rcss3d_agent/fsr.hpp"
 
 static constexpr double deg2rad(double rad) {return rad * 3.141592654 / 180.0;}
 
@@ -79,32 +80,49 @@ nao_interfaces::msg::Gyroscope SexpParser::getGyroscope()
 }
 
 
-// WARNING!!!!
-// THE SIMULATOR USES DIFFERENT SENSORS TO THE REAL ROBOT, AND THE CONVERSION
-// IS NOT COMPLETED YET. WOULD RECOMMEND NOT USING THIS MSG
+// Eg. (FRP (n lf) (c 0.00 -0.01 -0.01) (f -0.2 0.00 22.67))
+//     (FRP (n rf) (c 0.00 -0.01 -0.01) (f -0.2 0.00 22.67))
 nao_interfaces::msg::FSR SexpParser::getFSR()
 {
   nao_interfaces::msg::FSR fsrMsg;
 
-  for (auto const & arg : sexp.arguments()) {
-    // Joint expressions have form: (FRP (n lf) (c -0.14 0.08 -0.05) (f 1.12 -0.26 13.07))
-    auto const & s = arg.value.sexp;
+  for (unsigned i = 0; i < sexp.childCount(); ++i) {
+    auto const & s = sexp.getChild(i).value.sexp;
     if (s.at(0).value.str == "FRP") {
-      std::string frp_name = s.at(1).value.sexp.at(1).value.str;
-      if (frp_name == "lf") {
-        float lf_val = std::stof(s.at(3).value.sexp.at(3).value.str);
-        fsrMsg.l_foot_front_left = lf_val;
-        fsrMsg.l_foot_front_right = lf_val;
-        fsrMsg.l_foot_back_left = lf_val;
-        fsrMsg.l_foot_back_right = lf_val;
-      } else if (frp_name == "rf") {
-        float rf_val = std::stof(s.at(3).value.sexp.at(3).value.str);
-        fsrMsg.r_foot_front_left = rf_val;
-        fsrMsg.r_foot_front_right = rf_val;
-        fsrMsg.r_foot_back_left = rf_val;
-        fsrMsg.r_foot_back_right = rf_val;
+      auto const & footSexp = s.at(1).value.sexp;
+      FSR::Foot foot = (footSexp.at(1).value.str == "lf") ? FSR::Left : FSR::Right;
+
+      auto const & coordSexp = s.at(2).value.sexp;
+      float cx = std::stof(coordSexp.at(1).value.str);
+      float cy = std::stof(coordSexp.at(2).value.str);
+      // float cz = std::stof(coordSexp.at(3).value.str);
+
+      auto const & forceSexp = s.at(3).value.sexp;
+      float fx = std::stof(forceSexp.at(1).value.str);
+      float fy = std::stof(forceSexp.at(2).value.str);
+      float fz = std::stof(forceSexp.at(3).value.str);
+      float totalForce = sqrt(fx * fx + fy * fy + fz * fz);
+
+      float dists[FSR::NUM_LOCATION];
+      float totalDist = 0;
+      for (unsigned i = 0; i < FSR::NUM_LOCATION; ++i) {
+        float offset_x = FSR::FSR_POS[foot][i][FSR::X];
+        float offset_y = FSR::FSR_POS[foot][i][FSR::Y];
+        float dist = sqrt(pow(cx - offset_x, 2) + pow(cy - offset_y, 2));
+        dists[i] = dist;
+        totalDist += dist;
+      }
+
+      if (foot == FSR::Left) {
+        fsrMsg.l_foot_front_left = totalForce * dists[FSR::FrontLeft] / totalDist;
+        fsrMsg.l_foot_front_right = totalForce * dists[FSR::FrontRight] / totalDist;
+        fsrMsg.l_foot_back_left = totalForce * dists[FSR::BackLeft] / totalDist;
+        fsrMsg.l_foot_back_right = totalForce * dists[FSR::BackRight] / totalDist;
       } else {
-        RCLCPP_ERROR(logger, ("Received Unknown FRP with name: " + frp_name).c_str());
+        fsrMsg.r_foot_front_left = totalForce * dists[FSR::FrontLeft] / totalDist;
+        fsrMsg.r_foot_front_right = totalForce * dists[FSR::FrontRight] / totalDist;
+        fsrMsg.r_foot_back_left = totalForce * dists[FSR::BackLeft] / totalDist;
+        fsrMsg.r_foot_back_right = totalForce * dists[FSR::BackRight] / totalDist;
       }
     }
   }
