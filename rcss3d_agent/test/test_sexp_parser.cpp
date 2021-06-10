@@ -49,7 +49,7 @@ TEST(TestGoalposts, TestHasGoalposts)
 
   // Checks in order of: G1L, G1R, G2L, G2R
 
-  // (G1R (pol 17.52 3.27 4.07)) 
+  // (G1R (pol 17.52 3.27 4.07))
   soccer_vision_msgs::msg::Goalpost & post1 = goalposts.posts.at(0);
   EXPECT_EQ(post1.header.frame_id, "CameraTop_frame");
   EXPECT_EQ(post1.observed_top, true);
@@ -214,7 +214,7 @@ TEST(TestFlags, TestHasFlags)
   geometry_msgs::msg::Point base2 = polar_to_point(18.52, deg2rad(-18.91), deg2rad(1.52));
   EXPECT_NEAR(flag2.base.x, base2.x, 0.01);
   EXPECT_NEAR(flag2.base.y, base2.y, 0.01);
-  EXPECT_NEAR(flag2.base.z, base2.z, 0.01);  
+  EXPECT_NEAR(flag2.base.z, base2.z, 0.01);
 }
 
 TEST(TestFlags, TestNoFlags)

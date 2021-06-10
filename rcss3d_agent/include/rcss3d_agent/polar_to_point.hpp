@@ -15,8 +15,8 @@
 #ifndef RCSS3D_AGENT__POLAR_TO_POINT_HPP_
 #define RCSS3D_AGENT__POLAR_TO_POINT_HPP_
 
-#include "geometry_msgs/msg/point.hpp"
 #include <cmath>
+#include "geometry_msgs/msg/point.hpp"
 
 geometry_msgs::msg::Point polar_to_point(
   float distance_metres,

@@ -239,7 +239,7 @@ std::tuple<bool, soccer_vision_msgs::msg::RobotArray> SexpParser::getRobots()
   return std::make_tuple(robotArray.robots.size() > 0, robotArray);
 }
 
-// Eg. (See (F1R (pol 18.52 18.94 1.54)) 
+// Eg. (See (F1R (pol 18.52 18.94 1.54))
 //          (F2R (pol 18.52 -18.91 1.52))
 std::tuple<bool, soccer_vision_msgs::msg::FlagArray> SexpParser::getFlags()
 {
@@ -265,5 +265,4 @@ std::tuple<bool, soccer_vision_msgs::msg::FlagArray> SexpParser::getFlags()
   }
 
   return std::make_tuple(flagArray.flags.size() > 0, flagArray);
-
 }
