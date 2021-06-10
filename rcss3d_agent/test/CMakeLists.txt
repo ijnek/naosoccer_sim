@@ -23,6 +23,13 @@ target_link_libraries(test_joint_pid
     rcss3d_agent_lib
 )
 
+# Build test_polar_to_point
+ament_add_gtest(test_polar_to_point
+  test_polar_to_point.cpp)
+
+target_link_libraries(test_polar_to_point
+    rcss3d_agent_lib
+)
 
 # Build test_sexp_parser
 ament_add_gtest(test_sexp_parser

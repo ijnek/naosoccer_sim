@@ -14,6 +14,8 @@
 
 #include <gtest/gtest.h>
 #include "rcss3d_agent/sexp_parser.hpp"
+#include "rcss3d_agent/deg2rad.hpp"
+#include "rcss3d_agent/polar_to_point.hpp"
 
 // Taken from https://gitlab.com/robocup-sim/SimSpark/-/wikis/Perceptors#vision-perceptors
 // There is one extra backet (typo) in the original wiki text which has been fixed here
@@ -45,20 +47,25 @@ TEST(TestGoalposts, TestHasGoalposts)
   ASSERT_EQ(found, true);
   ASSERT_EQ(goalposts.posts.size(), 2u);
 
-  // Check in order of: G1L, G1R, G2L, G2R
+  // Checks in order of: G1L, G1R, G2L, G2R
+
+  // (G1R (pol 17.52 3.27 4.07)) 
   soccer_vision_msgs::msg::Goalpost & post1 = goalposts.posts.at(0);
   EXPECT_EQ(post1.header.frame_id, "CameraTop_frame");
   EXPECT_EQ(post1.observed_top, true);
-  EXPECT_NEAR(post1.point.x, 17.4473, 0.01);
-  EXPECT_NEAR(post1.point.y, 0.9968, 0.01);
-  EXPECT_NEAR(post1.point.z, 1.2434, 0.01);
+  geometry_msgs::msg::Point point1 = polar_to_point(17.52, deg2rad(3.27), deg2rad(4.07));
+  EXPECT_NEAR(post1.point.x, point1.x, 0.01);
+  EXPECT_NEAR(post1.point.y, point1.y, 0.01);
+  EXPECT_NEAR(post1.point.z, point1.z, 0.01);
 
+  // (G2R (pol 17.55 -3.33 4.31))
   soccer_vision_msgs::msg::Goalpost & post2 = goalposts.posts.at(1);
   EXPECT_EQ(post2.header.frame_id, "CameraTop_frame");
   EXPECT_EQ(post2.observed_top, true);
-  EXPECT_NEAR(post2.point.x, 17.4708, 0.01);
-  EXPECT_NEAR(post2.point.y, -1.0165, 0.01);
-  EXPECT_NEAR(post2.point.z, 1.3189, 0.01);
+  geometry_msgs::msg::Point point2 = polar_to_point(17.55, deg2rad(-3.33), deg2rad(4.31));
+  EXPECT_NEAR(post2.point.x, point2.x, 0.01);
+  EXPECT_NEAR(post2.point.y, point2.y, 0.01);
+  EXPECT_NEAR(post2.point.z, point2.z, 0.01);
 }
 
 TEST(TestGoalposts, TestNoGoalposts)
@@ -81,10 +88,12 @@ TEST(TestBall, TestHasBall)
   auto [ball_found, ball] = parser.getBall();
   ASSERT_EQ(ball_found, true);
 
+  // (B (pol 8.51 -0.21 -0.17))
   EXPECT_EQ(ball.header.frame_id, "CameraTop_frame");
-  EXPECT_NEAR(ball.point.x, 8.5099, 0.01);
-  EXPECT_NEAR(ball.point.y, -0.0312, 0.01);
-  EXPECT_NEAR(ball.point.z, -0.0252, 0.01);
+  geometry_msgs::msg::Point point = polar_to_point(8.51, deg2rad(-0.21), deg2rad(-0.17));
+  EXPECT_EQ(ball.point.x, point.x);
+  EXPECT_EQ(ball.point.y, point.y);
+  EXPECT_EQ(ball.point.z, point.z);
 }
 
 TEST(TestBall, TestNoBall)
@@ -108,23 +117,29 @@ TEST(TestFieldLines, TestHasFieldLines)
   ASSERT_EQ(lines_found, true);
   ASSERT_EQ(lines.lines.size(), 2u);
 
+  // (L (pol 12.11 -40.77 -2.40) (pol 12.95 -37.76 -2.41))
   soccer_vision_msgs::msg::FieldLine & line1 = lines.lines.at(0);
   EXPECT_EQ(line1.header.frame_id, "CameraTop_frame");
-  EXPECT_NEAR(line1.start.x, 9.1633, 0.01);
-  EXPECT_NEAR(line1.start.y, -7.9012, 0.01);
-  EXPECT_NEAR(line1.start.z, -0.5071, 0.01);
-  EXPECT_NEAR(line1.end.x, 10.2290, 0.01);
-  EXPECT_NEAR(line1.end.y, -7.9230, 0.01);
-  EXPECT_NEAR(line1.end.z, -0.5445, 0.01);
+  geometry_msgs::msg::Point start1 = polar_to_point(12.11, deg2rad(-40.77), deg2rad(-2.40));
+  geometry_msgs::msg::Point end1 = polar_to_point(12.95, deg2rad(-37.76), deg2rad(-2.41));
+  EXPECT_NEAR(line1.start.x, start1.x, 0.01);
+  EXPECT_NEAR(line1.start.y, start1.y, 0.01);
+  EXPECT_NEAR(line1.start.z, start1.z, 0.01);
+  EXPECT_NEAR(line1.end.x, end1.x, 0.01);
+  EXPECT_NEAR(line1.end.y, end1.y, 0.01);
+  EXPECT_NEAR(line1.end.z, end1.z, 0.01);
 
+  // (L (pol 12.97 -37.56 -2.24) (pol 13.32 -32.98 -2.20))
   soccer_vision_msgs::msg::FieldLine & line2 = lines.lines.at(1);
   EXPECT_EQ(line2.header.frame_id, "CameraTop_frame");
-  EXPECT_NEAR(line2.start.x, 10.2737, 0.01);
-  EXPECT_NEAR(line2.start.y, -7.9004, 0.01);
-  EXPECT_NEAR(line2.start.z, -0.5069, 0.01);
-  EXPECT_NEAR(line2.end.x, 11.1654, 0.01);
-  EXPECT_NEAR(line2.end.y, -7.2453, 0.01);
-  EXPECT_NEAR(line2.end.z, -0.5113, 0.01);
+  geometry_msgs::msg::Point start2 = polar_to_point(12.97, deg2rad(-37.56), deg2rad(-2.24));
+  geometry_msgs::msg::Point end2 = polar_to_point(13.32, deg2rad(-32.98), deg2rad(-2.20));
+  EXPECT_NEAR(line2.start.x, start2.x, 0.01);
+  EXPECT_NEAR(line2.start.y, start2.y, 0.01);
+  EXPECT_NEAR(line2.start.z, start2.z, 0.01);
+  EXPECT_NEAR(line2.end.x, end2.x, 0.01);
+  EXPECT_NEAR(line2.end.y, end2.y, 0.01);
+  EXPECT_NEAR(line2.end.z, end2.z, 0.01);
 }
 
 TEST(TestFieldLines, TestNoFieldLines)
@@ -151,13 +166,15 @@ TEST(TestRobots, TestHasRobots)
   ASSERT_EQ(found, true);
   ASSERT_EQ(robots.robots.size(), 1u);
 
+  // (head (pol 16.98 -0.21 3.19))
   soccer_vision_msgs::msg::Robot & robot1 = robots.robots.at(0);
   EXPECT_EQ(robot1.header.frame_id, "CameraTop_frame");
   EXPECT_EQ(robot1.team, "teamRed");
   EXPECT_EQ(robot1.id, 1);
-  EXPECT_NEAR(robot1.head.x, 16.9536, 0.01);
-  EXPECT_NEAR(robot1.head.y, -0.0621, 0.01);
-  EXPECT_NEAR(robot1.head.z, 0.9449, 0.01);
+  geometry_msgs::msg::Point head = polar_to_point(16.98, deg2rad(-0.21), deg2rad(3.19));
+  EXPECT_NEAR(robot1.head.x, head.x, 0.01);
+  EXPECT_NEAR(robot1.head.y, head.y, 0.01);
+  EXPECT_NEAR(robot1.head.z, head.z, 0.01);
 }
 
 TEST(TestRobots, TestNoFieldLines)
@@ -172,4 +189,29 @@ TEST(TestRobots, TestNoVisionData)
   SexpParser parser(sexp_none);
   auto [found, robots] = parser.getRobots();
   ASSERT_EQ(found, false);
+}
+
+TEST(DISABLED_TestFlags, TestHasFlags)
+{
+  // SexpParser parser(sexp);
+  // auto [found, flags] = parser.getFlags();
+  // ASSERT_EQ(found, true);
+  // ASSERT_EQ(flags.flags.size(), 2u);
+
+  // // Check in order of: G1L, G1R, G2L, G2R
+  // soccer_vision_msgs::msg::Flag & flag1 = flags.flags.at(0);
+  // EXPECT_EQ(post1.header.frame_id, "CameraTop_frame");
+
+  // "(F1R (pol 18.52 18.94 1.54)) "
+  // "(F2R (pol 18.52 -18.91 1.52)) "
+  // EXPECT_NEAR(post1.point.x, 17.4473, 0.01);
+  // EXPECT_NEAR(post1.point.y, 0.9968, 0.01);
+  // EXPECT_NEAR(post1.point.z, 1.2434, 0.01);
+}
+
+TEST(DISABLED_TestFlags, TestNoVisionData)
+{
+  // SexpParser parser(sexp_none);
+  // auto [found, flags] = parser.getFlags();
+  // ASSERT_EQ(found, false);
 }

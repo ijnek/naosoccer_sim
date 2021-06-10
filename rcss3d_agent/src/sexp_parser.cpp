@@ -18,8 +18,8 @@
 #include <tuple>
 #include "rcss3d_agent/sexp_parser.hpp"
 #include "rclcpp/rclcpp.hpp"
-
-static constexpr double deg2rad(double rad) {return rad * 3.141592654 / 180.0;}
+#include "rcss3d_agent/deg2rad.hpp"
+#include "rcss3d_agent/polar_to_point.hpp"
 
 std::vector<std::pair<std::string, float>> SexpParser::getJoints()
 {
@@ -237,17 +237,4 @@ std::tuple<bool, soccer_vision_msgs::msg::RobotArray> SexpParser::getRobots()
   }
 
   return std::make_tuple(robotArray.robots.size() > 0, robotArray);
-}
-
-
-geometry_msgs::msg::Point SexpParser::polar_to_point(
-  float distance, float horizontal_angle_phi, float vertical_angle_theta)
-{
-  geometry_msgs::msg::Point point;
-
-  point.x = distance * cos(horizontal_angle_phi) * cos(vertical_angle_theta);
-  point.y = distance * sin(horizontal_angle_phi) * cos(vertical_angle_theta);
-  point.z = distance * sin(vertical_angle_theta);
-
-  return point;
 }

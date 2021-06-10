@@ -65,8 +65,6 @@ public:
 private:
   sexpresso::Sexp sexp;
   rclcpp::Logger logger;
-  geometry_msgs::msg::Point polar_to_point(
-    float distance, float horizontal_angle_phi, float vertical_angle_theta);
 };
 
 #endif  // RCSS3D_AGENT__SEXP_PARSER_HPP_
