@@ -68,13 +68,10 @@ private:
   // - Touch
 
   rclcpp::Publisher<nao_interfaces::msg::Joints>::SharedPtr joints_pub;
-  rclcpp::Publisher<nao_interfaces::msg::Buttons>::SharedPtr buttons_pub;
   rclcpp::Publisher<nao_interfaces::msg::Accelerometer>::SharedPtr accelerometer_pub;
   rclcpp::Publisher<nao_interfaces::msg::Gyroscope>::SharedPtr gyroscope_pub;
   rclcpp::Publisher<nao_interfaces::msg::Angle>::SharedPtr angle_pub;
-  rclcpp::Publisher<nao_interfaces::msg::Sonar>::SharedPtr sonar_pub;
   rclcpp::Publisher<nao_interfaces::msg::FSR>::SharedPtr fsr_pub;
-  rclcpp::Publisher<nao_interfaces::msg::Touch>::SharedPtr touch_pub;
   rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr ball_pub;
   rclcpp::Publisher<soccer_vision_msgs::msg::GoalpostArray>::SharedPtr posts_pub;
   rclcpp::Publisher<soccer_vision_msgs::msg::FieldLineArray>::SharedPtr lines_pub;

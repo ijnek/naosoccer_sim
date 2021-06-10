@@ -38,14 +38,11 @@ Rcss3dAgent::Rcss3dAgent()
 
   RCLCPP_DEBUG(get_logger(), "Initialise publishers");
   joints_pub = create_publisher<nao_interfaces::msg::Joints>("sensors/joints", 10);
-  buttons_pub = create_publisher<nao_interfaces::msg::Buttons>("sensors/buttons", 10);
   accelerometer_pub = create_publisher<nao_interfaces::msg::Accelerometer>(
     "sensors/accelerometer", 10);
   gyroscope_pub = create_publisher<nao_interfaces::msg::Gyroscope>("sensors/gyroscope", 10);
   angle_pub = create_publisher<nao_interfaces::msg::Angle>("sensors/angle", 10);
-  sonar_pub = create_publisher<nao_interfaces::msg::Sonar>("sensors/sonar", 10);
   fsr_pub = create_publisher<nao_interfaces::msg::FSR>("sensors/fsr", 10);
-  touch_pub = create_publisher<nao_interfaces::msg::Touch>("sensors/touch", 10);
   ball_pub = create_publisher<geometry_msgs::msg::PointStamped>("vision/ball", 10);
   posts_pub = create_publisher<soccer_vision_msgs::msg::GoalpostArray>("vision/goalposts", 10);
   lines_pub = create_publisher<soccer_vision_msgs::msg::FieldLineArray>("vision/field_lines", 10);
