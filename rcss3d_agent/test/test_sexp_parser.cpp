@@ -177,7 +177,7 @@ TEST(TestRobots, TestHasRobots)
   EXPECT_NEAR(robot1.head.z, head.z, 0.01);
 }
 
-TEST(TestRobots, TestNoFieldLines)
+TEST(TestRobots, TestNoRobots)
 {
   SexpParser parser(sexp_empty);
   auto [found, robots] = parser.getRobots();
@@ -191,27 +191,42 @@ TEST(TestRobots, TestNoVisionData)
   ASSERT_EQ(found, false);
 }
 
-TEST(DISABLED_TestFlags, TestHasFlags)
+TEST(TestFlags, TestHasFlags)
 {
-  // SexpParser parser(sexp);
-  // auto [found, flags] = parser.getFlags();
-  // ASSERT_EQ(found, true);
-  // ASSERT_EQ(flags.flags.size(), 2u);
+  SexpParser parser(sexp);
+  auto [found, flags] = parser.getFlags();
+  ASSERT_EQ(found, true);
+  ASSERT_EQ(flags.flags.size(), 2u);
 
-  // // Check in order of: G1L, G1R, G2L, G2R
-  // soccer_vision_msgs::msg::Flag & flag1 = flags.flags.at(0);
-  // EXPECT_EQ(post1.header.frame_id, "CameraTop_frame");
+  // Checks in order of: F1L, F1R, F2L, F2R
 
   // "(F1R (pol 18.52 18.94 1.54)) "
+  soccer_vision_msgs::msg::Flag & flag1 = flags.flags.at(0);
+  EXPECT_EQ(flag1.header.frame_id, "CameraTop_frame");
+  geometry_msgs::msg::Point base1 = polar_to_point(18.52, deg2rad(18.94), deg2rad(1.54));
+  EXPECT_NEAR(flag1.base.x, base1.x, 0.01);
+  EXPECT_NEAR(flag1.base.y, base1.y, 0.01);
+  EXPECT_NEAR(flag1.base.z, base1.z, 0.01);
+
   // "(F2R (pol 18.52 -18.91 1.52)) "
-  // EXPECT_NEAR(post1.point.x, 17.4473, 0.01);
-  // EXPECT_NEAR(post1.point.y, 0.9968, 0.01);
-  // EXPECT_NEAR(post1.point.z, 1.2434, 0.01);
+  soccer_vision_msgs::msg::Flag & flag2 = flags.flags.at(1);
+  EXPECT_EQ(flag2.header.frame_id, "CameraTop_frame");
+  geometry_msgs::msg::Point base2 = polar_to_point(18.52, deg2rad(-18.91), deg2rad(1.52));
+  EXPECT_NEAR(flag2.base.x, base2.x, 0.01);
+  EXPECT_NEAR(flag2.base.y, base2.y, 0.01);
+  EXPECT_NEAR(flag2.base.z, base2.z, 0.01);  
 }
 
-TEST(DISABLED_TestFlags, TestNoVisionData)
+TEST(TestFlags, TestNoFlags)
 {
-  // SexpParser parser(sexp_none);
-  // auto [found, flags] = parser.getFlags();
-  // ASSERT_EQ(found, false);
+  SexpParser parser(sexp_empty);
+  auto [found, flags] = parser.getFlags();
+  ASSERT_EQ(found, false);
+}
+
+TEST(TestFlags, TestNoVisionData)
+{
+  SexpParser parser(sexp_none);
+  auto [found, flags] = parser.getFlags();
+  ASSERT_EQ(found, false);
 }

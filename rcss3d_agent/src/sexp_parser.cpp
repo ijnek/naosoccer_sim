@@ -238,3 +238,32 @@ std::tuple<bool, soccer_vision_msgs::msg::RobotArray> SexpParser::getRobots()
 
   return std::make_tuple(robotArray.robots.size() > 0, robotArray);
 }
+
+// Eg. (See (F1R (pol 18.52 18.94 1.54)) 
+//          (F2R (pol 18.52 -18.91 1.52))
+std::tuple<bool, soccer_vision_msgs::msg::FlagArray> SexpParser::getFlags()
+{
+  soccer_vision_msgs::msg::FlagArray flagArray;
+
+  for (std::string & flagName :
+    std::vector<std::string>{"F1L", "F1R", "F2L", "F2R"})
+  {
+    auto const * flagSexp = sexp.getChildByPath("See/" + flagName + "/pol");
+    bool found = (flagSexp != nullptr);
+    if (found) {
+      RCLCPP_DEBUG(logger, "Found flag information");
+
+      soccer_vision_msgs::msg::Flag flag;
+      flag.header.frame_id = "CameraTop_frame";
+      flag.base = polar_to_point(
+        std::stof(flagSexp->value.sexp.at(1).value.str),
+        deg2rad(std::stof(flagSexp->value.sexp.at(2).value.str)),
+        deg2rad(std::stof(flagSexp->value.sexp.at(3).value.str)));
+
+      flagArray.flags.push_back(flag);
+    }
+  }
+
+  return std::make_tuple(flagArray.flags.size() > 0, flagArray);
+
+}

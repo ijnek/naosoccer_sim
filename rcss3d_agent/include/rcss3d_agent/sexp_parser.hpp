@@ -33,6 +33,7 @@
 #include "soccer_vision_msgs/msg/goalpost_array.hpp"
 #include "soccer_vision_msgs/msg/field_line_array.hpp"
 #include "soccer_vision_msgs/msg/robot_array.hpp"
+#include "soccer_vision_msgs/msg/flag_array.hpp"
 
 // See https://gitlab.com/robocup-sim/SimSpark/-/wikis/Perceptors#forceresistance-perceptor
 // to figure out which perceptors are available on each cycle, and which are not.
@@ -53,6 +54,7 @@ public:
   std::tuple<bool, soccer_vision_msgs::msg::GoalpostArray> getGoalposts();
   std::tuple<bool, soccer_vision_msgs::msg::FieldLineArray> getFieldLines();
   std::tuple<bool, soccer_vision_msgs::msg::RobotArray> getRobots();
+  std::tuple<bool, soccer_vision_msgs::msg::FlagArray> getFlags();
 
   // gamestate
   // observation
