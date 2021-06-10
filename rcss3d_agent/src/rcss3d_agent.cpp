@@ -24,8 +24,8 @@
 #include "rcss3d_agent/sim_to_nao.hpp"
 #include "rcss3d_agent/nao_to_sim.hpp"
 
-NaoSoccerSim::NaoSoccerSim()
-: Node("NaoSoccerSim")
+Rcss3dAgent::Rcss3dAgent()
+: Node("Rcss3dAgent")
 {
   RCLCPP_DEBUG(get_logger(), "Declare parameters");
   this->declare_parameter<std::string>("host", "127.0.0.1");
@@ -50,6 +50,7 @@ NaoSoccerSim::NaoSoccerSim()
   posts_pub = create_publisher<soccer_vision_msgs::msg::GoalpostArray>("vision/goalposts", 10);
   lines_pub = create_publisher<soccer_vision_msgs::msg::FieldLineArray>("vision/field_lines", 10);
   robots_pub = create_publisher<soccer_vision_msgs::msg::RobotArray>("vision/robots", 10);
+  flags_pub = create_publisher<soccer_vision_msgs::msg::FlagArray>("vision/flags", 10);
 
   RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
   joints_sub =
@@ -140,6 +141,14 @@ NaoSoccerSim::NaoSoccerSim()
           robots_pub->publish(robots);
         }
 
+        auto [flags_found, flags] = parsed.getFlags();
+        if (flags_found) {
+          for (auto & r : flags.flags) {
+            r.header.stamp = now();
+          }
+          flags_pub->publish(flags);
+        }
+
         SimJoints speed_cmd_sim = naoJointsPid.update(toSimJoints(joints));
         std::string msg = SexpCreator::createJointMessage(fromSimJoints(speed_cmd_sim));
         RCLCPP_DEBUG(this->get_logger(), ("Sending: " + msg).c_str());
@@ -148,7 +157,7 @@ NaoSoccerSim::NaoSoccerSim()
     });
 }
 
-NaoSoccerSim::~NaoSoccerSim()
+Rcss3dAgent::~Rcss3dAgent()
 {
   if (receive_thread_.joinable()) {
     receive_thread_.join();

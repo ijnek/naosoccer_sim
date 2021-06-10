@@ -32,12 +32,13 @@
 #include "soccer_vision_msgs/msg/goalpost_array.hpp"
 #include "soccer_vision_msgs/msg/field_line_array.hpp"
 #include "soccer_vision_msgs/msg/robot_array.hpp"
+#include "soccer_vision_msgs/msg/flag_array.hpp"
 
-class NaoSoccerSim : public rclcpp::Node
+class Rcss3dAgent : public rclcpp::Node
 {
 public:
-  NaoSoccerSim();
-  virtual ~NaoSoccerSim();
+  Rcss3dAgent();
+  virtual ~Rcss3dAgent();
 
 private:
   // Parameters (things that don't change)
@@ -78,6 +79,7 @@ private:
   rclcpp::Publisher<soccer_vision_msgs::msg::GoalpostArray>::SharedPtr posts_pub;
   rclcpp::Publisher<soccer_vision_msgs::msg::FieldLineArray>::SharedPtr lines_pub;
   rclcpp::Publisher<soccer_vision_msgs::msg::RobotArray>::SharedPtr robots_pub;
+  rclcpp::Publisher<soccer_vision_msgs::msg::FlagArray>::SharedPtr flags_pub;
 
   rclcpp::Subscription<nao_interfaces::msg::Joints>::SharedPtr joints_sub;
 
