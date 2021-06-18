@@ -4,4 +4,4 @@
 
 ROS2 package for nao in robocup SPL
 
-Documentation can be found on [ReadTheDocs](https://naosoccer-sim.readthedocs.io/)
+For more information, see our [Documentation](https://naosoccer-sim.readthedocs.io/)
