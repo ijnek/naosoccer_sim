@@ -52,9 +52,9 @@ Rcss3dAgent::Rcss3dAgent()
   RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
   joint_positions_sub =
     create_subscription<nao_command_msgs::msg::JointPositions>(
-    "effectors/joints", 10,
+    "effectors/joint_positions", 10,
     [this](nao_command_msgs::msg::JointPositions::SharedPtr cmd_nao) {
-      RCLCPP_DEBUG(this->get_logger(), "Received effectors/joints");
+      RCLCPP_DEBUG(this->get_logger(), "Received effectors/joint_positions");
 
       SimJointCommands cmd_sim = nao_to_sim(*cmd_nao);
       naoJointsPid.setTarget(cmd_sim);
