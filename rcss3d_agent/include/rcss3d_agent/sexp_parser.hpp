@@ -25,10 +25,10 @@
 #define SEXPRESSO_OPT_OUT_PIKESTYLE
 #include "sexpresso/sexpresso.hpp"
 
-#include "nao_interfaces/msg/joints.hpp"
-#include "nao_interfaces/msg/gyroscope.hpp"
-#include "nao_interfaces/msg/accelerometer.hpp"
-#include "nao_interfaces/msg/fsr.hpp"
+#include "nao_sensor_msgs/msg/joint_positions.hpp"
+#include "nao_sensor_msgs/msg/gyroscope.hpp"
+#include "nao_sensor_msgs/msg/accelerometer.hpp"
+#include "nao_sensor_msgs/msg/fsr.hpp"
 #include "geometry_msgs/msg/point_stamped.hpp"
 #include "soccer_vision_msgs/msg/goalpost_array.hpp"
 #include "soccer_vision_msgs/msg/field_line_array.hpp"
@@ -47,9 +47,9 @@ public:
   : sexp(sexpresso::parse(msg)),
     logger(rclcpp::get_logger("sexp_parser")) {}
   std::vector<std::pair<std::string, float>> getJoints();
-  nao_interfaces::msg::Accelerometer getAccelerometer();
-  nao_interfaces::msg::Gyroscope getGyroscope();
-  nao_interfaces::msg::FSR getFSR();
+  nao_sensor_msgs::msg::Accelerometer getAccelerometer();
+  nao_sensor_msgs::msg::Gyroscope getGyroscope();
+  nao_sensor_msgs::msg::FSR getFSR();
   std::tuple<bool, geometry_msgs::msg::PointStamped> getBall();
   std::tuple<bool, soccer_vision_msgs::msg::GoalpostArray> getGoalposts();
   std::tuple<bool, soccer_vision_msgs::msg::FieldLineArray> getFieldLines();

@@ -16,9 +16,9 @@
 #define RCSS3D_AGENT__NAO_TO_SIM_HPP_
 
 #include <map>
-#include "nao_interfaces/msg/joints.hpp"
+#include "nao_command_msgs/msg/joint_positions.hpp"
 #include "rcss3d_agent/sim_joints.hpp"
 
-SimJoints nao_to_sim(const nao_interfaces::msg::Joints & nao_joints);
+SimJointCommands nao_to_sim(const nao_command_msgs::msg::JointPositions & nao_joints);
 
 #endif  // RCSS3D_AGENT__NAO_TO_SIM_HPP_

@@ -18,7 +18,6 @@
 #include "rcss3d_agent/rcss3d_agent.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "rcss3d_agent/socket.hpp"
-#include "nao_interfaces/msg/joints.hpp"
 #include "rcss3d_agent/sexp_creator.hpp"
 #include "rcss3d_agent/sexp_parser.hpp"
 #include "rcss3d_agent/sim_to_nao.hpp"
@@ -37,12 +36,13 @@ Rcss3dAgent::Rcss3dAgent()
   this->declare_parameter<double>("theta", 0.0);
 
   RCLCPP_DEBUG(get_logger(), "Initialise publishers");
-  joints_pub = create_publisher<nao_interfaces::msg::Joints>("sensors/joints", 10);
-  accelerometer_pub = create_publisher<nao_interfaces::msg::Accelerometer>(
+  joint_positions_pub = create_publisher<nao_sensor_msgs::msg::JointPositions>(
+    "sensors/joint_positions", 10);
+  accelerometer_pub = create_publisher<nao_sensor_msgs::msg::Accelerometer>(
     "sensors/accelerometer", 10);
-  gyroscope_pub = create_publisher<nao_interfaces::msg::Gyroscope>("sensors/gyroscope", 10);
-  angle_pub = create_publisher<nao_interfaces::msg::Angle>("sensors/angle", 10);
-  fsr_pub = create_publisher<nao_interfaces::msg::FSR>("sensors/fsr", 10);
+  gyroscope_pub = create_publisher<nao_sensor_msgs::msg::Gyroscope>("sensors/gyroscope", 10);
+  angle_pub = create_publisher<nao_sensor_msgs::msg::Angle>("sensors/angle", 10);
+  fsr_pub = create_publisher<nao_sensor_msgs::msg::FSR>("sensors/fsr", 10);
   ball_pub = create_publisher<geometry_msgs::msg::PointStamped>("vision/ball", 10);
   posts_pub = create_publisher<soccer_vision_msgs::msg::GoalpostArray>("vision/goalposts", 10);
   lines_pub = create_publisher<soccer_vision_msgs::msg::FieldLineArray>("vision/field_lines", 10);
@@ -50,13 +50,13 @@ Rcss3dAgent::Rcss3dAgent()
   flags_pub = create_publisher<soccer_vision_msgs::msg::FlagArray>("vision/flags", 10);
 
   RCLCPP_DEBUG(get_logger(), "Initialise subscriptions");
-  joints_sub =
-    create_subscription<nao_interfaces::msg::Joints>(
+  joint_positions_sub =
+    create_subscription<nao_command_msgs::msg::JointPositions>(
     "effectors/joints", 10,
-    [this](nao_interfaces::msg::Joints::SharedPtr cmd_nao) {
+    [this](nao_command_msgs::msg::JointPositions::SharedPtr cmd_nao) {
       RCLCPP_DEBUG(this->get_logger(), "Received effectors/joints");
 
-      SimJoints cmd_sim = nao_to_sim(*cmd_nao);
+      SimJointCommands cmd_sim = nao_to_sim(*cmd_nao);
       naoJointsPid.setTarget(cmd_sim);
     });
 
@@ -96,12 +96,12 @@ Rcss3dAgent::Rcss3dAgent()
         SexpParser parsed(recv);
 
         std::vector<std::pair<std::string, float>> joints = parsed.getJoints();
-        joints_pub->publish(sim_to_nao(joints));
+        joint_positions_pub->publish(sim_to_nao(joints));
 
-        nao_interfaces::msg::Accelerometer acc_val = parsed.getAccelerometer();
+        nao_sensor_msgs::msg::Accelerometer acc_val = parsed.getAccelerometer();
         accelerometer_pub->publish(acc_val);
 
-        nao_interfaces::msg::Gyroscope gyr_val = parsed.getGyroscope();
+        nao_sensor_msgs::msg::Gyroscope gyr_val = parsed.getGyroscope();
         gyroscope_pub->publish(gyr_val);
 
         angle_pub->publish(complementaryFilter.update(acc_val, gyr_val));

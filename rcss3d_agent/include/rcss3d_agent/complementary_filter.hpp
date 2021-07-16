@@ -15,9 +15,9 @@
 #ifndef RCSS3D_AGENT__COMPLEMENTARY_FILTER_HPP_
 #define RCSS3D_AGENT__COMPLEMENTARY_FILTER_HPP_
 
-#include "nao_interfaces/msg/angle.hpp"
-#include "nao_interfaces/msg/accelerometer.hpp"
-#include "nao_interfaces/msg/gyroscope.hpp"
+#include "nao_sensor_msgs/msg/angle.hpp"
+#include "nao_sensor_msgs/msg/accelerometer.hpp"
+#include "nao_sensor_msgs/msg/gyroscope.hpp"
 
 /*
  *  The simulator does not provide an AngleX or AngleY sensor. Luckily,
@@ -39,15 +39,15 @@ public:
   {
   }
 
-  nao_interfaces::msg::Angle update(
-    const nao_interfaces::msg::Accelerometer & acc,
-    const nao_interfaces::msg::Gyroscope & gyr);
+  nao_sensor_msgs::msg::Angle update(
+    const nao_sensor_msgs::msg::Accelerometer & acc,
+    const nao_sensor_msgs::msg::Gyroscope & gyr);
 
 private:
   float x_;
   float y_;
 
-  nao_interfaces::msg::Angle getAngle();
+  nao_sensor_msgs::msg::Angle getAngle();
 };
 
 #endif  // RCSS3D_AGENT__COMPLEMENTARY_FILTER_HPP_

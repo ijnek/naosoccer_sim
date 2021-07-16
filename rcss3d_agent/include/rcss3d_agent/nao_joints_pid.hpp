@@ -23,7 +23,7 @@ class NaoJointsPid
 {
 public:
   NaoJointsPid();
-  void setTarget(SimJoints target);
+  void setTarget(SimJointCommands target);
 
   SimJoints update(SimJoints nextJoints);
 

@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <string>
 #include <utility>
+#include <map>
 
 enum SimJointIndex
 {
@@ -98,9 +99,15 @@ const std::array<std::string, NUM_SIM_JOINTS> jointPerceptorNames = {
   "raj4",
 };
 
+typedef std::array<float, NUM_SIM_JOINTS> SimJointSensors;
+
+// Map of <index of joint in jointPerceptorNames, position target>
+typedef std::map<int, float> SimJointCommands;
+
 typedef std::array<float, NUM_SIM_JOINTS> SimJoints;
 
 SimJoints toSimJoints(std::vector<std::pair<std::string, float>> in);
+SimJointCommands toSimJointCommands(std::vector<std::pair<std::string, float>> in);
 std::vector<std::pair<std::string, float>> fromSimJoints(SimJoints & in);
 
 #endif  // RCSS3D_AGENT__SIM_JOINTS_HPP_

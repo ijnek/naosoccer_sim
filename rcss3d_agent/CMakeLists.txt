@@ -22,7 +22,8 @@ include_directories(
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(nao_interfaces REQUIRED)
+find_package(nao_command_msgs REQUIRED)
+find_package(nao_sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(soccer_vision_msgs REQUIRED)
 
@@ -43,7 +44,8 @@ add_library(rcss3d_agent_lib SHARED
 
 ament_target_dependencies(rcss3d_agent_lib
   rclcpp
-  nao_interfaces
+  nao_command_msgs
+  nao_sensor_msgs
   geometry_msgs
   soccer_vision_msgs)
 

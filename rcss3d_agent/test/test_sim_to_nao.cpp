@@ -18,15 +18,16 @@
 #include <vector>
 #include <map>
 #include "rcss3d_agent/sim_to_nao.hpp"
+#include "nao_sensor_msgs/msg/joint_indexes.hpp"
 
 void test(
   std::vector<std::pair<std::string, float>> sim_joints,
   std::map<int, float> expected)
 {
-  nao_interfaces::msg::Joints converted = sim_to_nao(sim_joints);
+  nao_sensor_msgs::msg::JointPositions converted = sim_to_nao(sim_joints);
 
   for (auto const & [key, val] : expected) {
-    EXPECT_EQ(converted.angles.at(key), val);
+    EXPECT_EQ(converted.positions.at(key), val);
   }
 }
 
@@ -56,33 +57,33 @@ TEST(TestSimToNao, Test)
     {"raj4", 0.19}};
 
   std::map<int, float> expected_nao_joint_positions = {
-    {nao_interfaces::msg::Joints::HEADYAW, -0.01},
-    {nao_interfaces::msg::Joints::HEADPITCH, 0.02},
-    {nao_interfaces::msg::Joints::LSHOULDERPITCH, -0.01},
-    {nao_interfaces::msg::Joints::LSHOULDERROLL, 0.02},
-    {nao_interfaces::msg::Joints::LELBOWYAW, 0.03},
-    {nao_interfaces::msg::Joints::LELBOWROLL, 0.04},
-    {nao_interfaces::msg::Joints::LHIPYAWPITCH, 0.05},
-    {nao_interfaces::msg::Joints::LHIPROLL, 0.06},
-    {nao_interfaces::msg::Joints::LHIPPITCH, -0.07},
-    {nao_interfaces::msg::Joints::LKNEEPITCH, -0.08},
-    {nao_interfaces::msg::Joints::LANKLEPITCH, -0.09},
-    {nao_interfaces::msg::Joints::LANKLEROLL, 0.10},
-    {nao_interfaces::msg::Joints::RHIPROLL, 0.11},
-    {nao_interfaces::msg::Joints::RHIPPITCH, -0.12},
-    {nao_interfaces::msg::Joints::RKNEEPITCH, -0.13},
-    {nao_interfaces::msg::Joints::RANKLEPITCH, -0.14},
-    {nao_interfaces::msg::Joints::RANKLEROLL, 0.15},
-    {nao_interfaces::msg::Joints::RSHOULDERPITCH, -0.16},
-    {nao_interfaces::msg::Joints::RSHOULDERROLL, 0.17},
-    {nao_interfaces::msg::Joints::RELBOWYAW, 0.18},
-    {nao_interfaces::msg::Joints::RELBOWROLL, 0.19},
+    {nao_sensor_msgs::msg::JointIndexes::HEADYAW, -0.01},
+    {nao_sensor_msgs::msg::JointIndexes::HEADPITCH, 0.02},
+    {nao_sensor_msgs::msg::JointIndexes::LSHOULDERPITCH, -0.01},
+    {nao_sensor_msgs::msg::JointIndexes::LSHOULDERROLL, 0.02},
+    {nao_sensor_msgs::msg::JointIndexes::LELBOWYAW, 0.03},
+    {nao_sensor_msgs::msg::JointIndexes::LELBOWROLL, 0.04},
+    {nao_sensor_msgs::msg::JointIndexes::LHIPYAWPITCH, 0.05},
+    {nao_sensor_msgs::msg::JointIndexes::LHIPROLL, 0.06},
+    {nao_sensor_msgs::msg::JointIndexes::LHIPPITCH, -0.07},
+    {nao_sensor_msgs::msg::JointIndexes::LKNEEPITCH, -0.08},
+    {nao_sensor_msgs::msg::JointIndexes::LANKLEPITCH, -0.09},
+    {nao_sensor_msgs::msg::JointIndexes::LANKLEROLL, 0.10},
+    {nao_sensor_msgs::msg::JointIndexes::RHIPROLL, 0.11},
+    {nao_sensor_msgs::msg::JointIndexes::RHIPPITCH, -0.12},
+    {nao_sensor_msgs::msg::JointIndexes::RKNEEPITCH, -0.13},
+    {nao_sensor_msgs::msg::JointIndexes::RANKLEPITCH, -0.14},
+    {nao_sensor_msgs::msg::JointIndexes::RANKLEROLL, 0.15},
+    {nao_sensor_msgs::msg::JointIndexes::RSHOULDERPITCH, -0.16},
+    {nao_sensor_msgs::msg::JointIndexes::RSHOULDERROLL, 0.17},
+    {nao_sensor_msgs::msg::JointIndexes::RELBOWYAW, 0.18},
+    {nao_sensor_msgs::msg::JointIndexes::RELBOWROLL, 0.19},
 
     // below should be 0 because they don't exist in simulation.
-    {nao_interfaces::msg::Joints::LWRISTYAW, 0.0},
-    {nao_interfaces::msg::Joints::RWRISTYAW, 0.0},
-    {nao_interfaces::msg::Joints::LHAND, 0.0},
-    {nao_interfaces::msg::Joints::RHAND, 0.0}};
+    {nao_sensor_msgs::msg::JointIndexes::LWRISTYAW, 0.0},
+    {nao_sensor_msgs::msg::JointIndexes::RWRISTYAW, 0.0},
+    {nao_sensor_msgs::msg::JointIndexes::LHAND, 0.0},
+    {nao_sensor_msgs::msg::JointIndexes::RHAND, 0.0}};
 
   test(sim_joints, expected_nao_joint_positions);
 }

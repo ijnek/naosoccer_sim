@@ -17,14 +17,15 @@
 
 #include <thread>
 #include "rclcpp/rclcpp.hpp"
-#include "nao_interfaces/msg/joints.hpp"
-#include "nao_interfaces/msg/buttons.hpp"
-#include "nao_interfaces/msg/accelerometer.hpp"
-#include "nao_interfaces/msg/gyroscope.hpp"
-#include "nao_interfaces/msg/angle.hpp"
-#include "nao_interfaces/msg/sonar.hpp"
-#include "nao_interfaces/msg/fsr.hpp"
-#include "nao_interfaces/msg/touch.hpp"
+#include "nao_sensor_msgs/msg/joint_positions.hpp"
+#include "nao_sensor_msgs/msg/buttons.hpp"
+#include "nao_sensor_msgs/msg/accelerometer.hpp"
+#include "nao_sensor_msgs/msg/gyroscope.hpp"
+#include "nao_sensor_msgs/msg/angle.hpp"
+#include "nao_sensor_msgs/msg/sonar.hpp"
+#include "nao_sensor_msgs/msg/fsr.hpp"
+#include "nao_sensor_msgs/msg/touch.hpp"
+#include "nao_command_msgs/msg/joint_positions.hpp"
 #include "rcss3d_agent/connection.hpp"
 #include "rcss3d_agent/nao_joints_pid.hpp"
 #include "rcss3d_agent/complementary_filter.hpp"
@@ -67,18 +68,18 @@ private:
   // - FSR
   // - Touch
 
-  rclcpp::Publisher<nao_interfaces::msg::Joints>::SharedPtr joints_pub;
-  rclcpp::Publisher<nao_interfaces::msg::Accelerometer>::SharedPtr accelerometer_pub;
-  rclcpp::Publisher<nao_interfaces::msg::Gyroscope>::SharedPtr gyroscope_pub;
-  rclcpp::Publisher<nao_interfaces::msg::Angle>::SharedPtr angle_pub;
-  rclcpp::Publisher<nao_interfaces::msg::FSR>::SharedPtr fsr_pub;
+  rclcpp::Publisher<nao_sensor_msgs::msg::JointPositions>::SharedPtr joint_positions_pub;
+  rclcpp::Publisher<nao_sensor_msgs::msg::Accelerometer>::SharedPtr accelerometer_pub;
+  rclcpp::Publisher<nao_sensor_msgs::msg::Gyroscope>::SharedPtr gyroscope_pub;
+  rclcpp::Publisher<nao_sensor_msgs::msg::Angle>::SharedPtr angle_pub;
+  rclcpp::Publisher<nao_sensor_msgs::msg::FSR>::SharedPtr fsr_pub;
   rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr ball_pub;
   rclcpp::Publisher<soccer_vision_msgs::msg::GoalpostArray>::SharedPtr posts_pub;
   rclcpp::Publisher<soccer_vision_msgs::msg::FieldLineArray>::SharedPtr lines_pub;
   rclcpp::Publisher<soccer_vision_msgs::msg::RobotArray>::SharedPtr robots_pub;
   rclcpp::Publisher<soccer_vision_msgs::msg::FlagArray>::SharedPtr flags_pub;
 
-  rclcpp::Subscription<nao_interfaces::msg::Joints>::SharedPtr joints_sub;
+  rclcpp::Subscription<nao_command_msgs::msg::JointPositions>::SharedPtr joint_positions_sub;
 
   Connection connection;
 

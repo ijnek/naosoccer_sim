@@ -19,12 +19,14 @@
 #define D 0.0
 
 NaoJointsPid::NaoJointsPid()
-: jointPid(P, I, D)
+: jointPid(P, I, D), target{0}
 {}
 
-void NaoJointsPid::setTarget(SimJoints target)
+void NaoJointsPid::setTarget(SimJointCommands target)
 {
-  this->target = target;
+  for (auto const &[index, val] : target) {
+    this->target.at(index) = val;
+  }
 }
 
 SimJoints NaoJointsPid::update(SimJoints current)

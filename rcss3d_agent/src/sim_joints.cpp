@@ -32,6 +32,21 @@ SimJoints toSimJoints(std::vector<std::pair<std::string, float>> in)
   return simJoints;
 }
 
+SimJointCommands toSimJointCommands(std::vector<std::pair<std::string, float>> in)
+{
+  SimJointCommands simJointCommands;
+
+  for (auto const &[name, speed] : in) {
+    auto itr = std::find(jointPerceptorNames.begin(), jointPerceptorNames.end(), name);
+
+    if (itr != jointPerceptorNames.end()) {
+      int idx = itr - jointPerceptorNames.begin();
+      simJointCommands.insert(std::make_pair(idx, speed));
+    }
+  }
+  return simJointCommands;
+}
+
 std::vector<std::pair<std::string, float>> fromSimJoints(SimJoints & in)
 {
   std::vector<std::pair<std::string, float>> out;

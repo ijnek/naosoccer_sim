@@ -24,9 +24,9 @@
 // Using implementation provided here: https://www.youtube.com/watch?v=whSw42XddsU&ab_channel=BrianDouglas
 // Axes of NAO are explained here: http://doc.aldebaran.com/2-1/family/robots/inertial_robot.html
 
-nao_interfaces::msg::Angle ComplementaryFilter::update(
-  const nao_interfaces::msg::Accelerometer & acc,
-  const nao_interfaces::msg::Gyroscope & gyr)
+nao_sensor_msgs::msg::Angle ComplementaryFilter::update(
+  const nao_sensor_msgs::msg::Accelerometer & acc,
+  const nao_sensor_msgs::msg::Gyroscope & gyr)
 {
   float angle_x_from_gyr = x_ + gyr.x * SIM_DT;
   float angle_y_from_gyr = y_ + gyr.y * SIM_DT;
@@ -40,9 +40,9 @@ nao_interfaces::msg::Angle ComplementaryFilter::update(
   return getAngle();
 }
 
-nao_interfaces::msg::Angle ComplementaryFilter::getAngle()
+nao_sensor_msgs::msg::Angle ComplementaryFilter::getAngle()
 {
-  nao_interfaces::msg::Angle angles;
+  nao_sensor_msgs::msg::Angle angles;
   angles.x = x_;
   angles.y = y_;
   return angles;

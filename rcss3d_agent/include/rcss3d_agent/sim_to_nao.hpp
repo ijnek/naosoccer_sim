@@ -19,9 +19,9 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "nao_interfaces/msg/joints.hpp"
+#include "nao_sensor_msgs/msg/joint_positions.hpp"
 
-nao_interfaces::msg::Joints sim_to_nao(
+nao_sensor_msgs::msg::JointPositions sim_to_nao(
   const std::vector<std::pair<std::string, float>> & sim_joints);
 
 #endif  // RCSS3D_AGENT__SIM_TO_NAO_HPP_

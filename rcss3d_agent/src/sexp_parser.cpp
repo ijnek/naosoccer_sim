@@ -37,9 +37,9 @@ std::vector<std::pair<std::string, float>> SexpParser::getJoints()
 }
 
 // eg. (ACC (n torso) (a 0.00 0.00 9.81))
-nao_interfaces::msg::Accelerometer SexpParser::getAccelerometer()
+nao_sensor_msgs::msg::Accelerometer SexpParser::getAccelerometer()
 {
-  nao_interfaces::msg::Accelerometer accelerometerMsg;
+  nao_sensor_msgs::msg::Accelerometer accelerometerMsg;
 
   auto const * accSexp = sexp.getChildByPath("ACC/a");
   bool found = (accSexp != nullptr);
@@ -58,9 +58,9 @@ nao_interfaces::msg::Accelerometer SexpParser::getAccelerometer()
 }
 
 // eg. (GYR (n torso) (rt 0.01 0.07 0.46))
-nao_interfaces::msg::Gyroscope SexpParser::getGyroscope()
+nao_sensor_msgs::msg::Gyroscope SexpParser::getGyroscope()
 {
-  nao_interfaces::msg::Gyroscope gyroscopeMsg;
+  nao_sensor_msgs::msg::Gyroscope gyroscopeMsg;
 
   auto const * gyrSexp = sexp.getChildByPath("GYR/rt");
   bool found = (gyrSexp != nullptr);
@@ -82,9 +82,9 @@ nao_interfaces::msg::Gyroscope SexpParser::getGyroscope()
 // WARNING!!!!
 // THE SIMULATOR USES DIFFERENT SENSORS TO THE REAL ROBOT, AND THE CONVERSION
 // IS NOT COMPLETED YET. WOULD RECOMMEND NOT USING THIS MSG
-nao_interfaces::msg::FSR SexpParser::getFSR()
+nao_sensor_msgs::msg::FSR SexpParser::getFSR()
 {
-  nao_interfaces::msg::FSR fsrMsg;
+  nao_sensor_msgs::msg::FSR fsrMsg;
 
   for (auto const & arg : sexp.arguments()) {
     // Joint expressions have form: (FRP (n lf) (c -0.14 0.08 -0.05) (f 1.12 -0.26 13.07))

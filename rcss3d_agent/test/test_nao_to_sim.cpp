@@ -14,58 +14,88 @@
 
 #include <gtest/gtest.h>
 #include <map>
+#include <utility>
+#include <vector>
 #include "rcss3d_agent/nao_to_sim.hpp"
+#include "nao_command_msgs/msg/joint_indexes.hpp"
 
 void test(
-  nao_interfaces::msg::Joints nao_joints,
+  nao_command_msgs::msg::JointPositions nao_joints,
   std::map<SimJointIndex, float> expected_sim_joints)
 {
-  SimJoints converted = nao_to_sim(nao_joints);
+  SimJointCommands converted = nao_to_sim(nao_joints);
 
   for (auto const &[sim_index, val] : expected_sim_joints) {
     EXPECT_EQ(converted.at(sim_index), val);
   }
 }
 
-nao_interfaces::msg::Joints createJointsMsg(std::map<int, float> nao_joints_map)
+nao_command_msgs::msg::JointPositions createJointsMsg(
+  std::vector<std::pair<int,
+  float>> nao_joints_vec)
 {
-  nao_interfaces::msg::Joints naoJoints;
+  nao_command_msgs::msg::JointPositions naoJoints;
 
-  for (auto const &[key, val] : nao_joints_map) {
-    naoJoints.angles.at(key) = val;
+  for (auto const &[key, val] : nao_joints_vec) {
+    naoJoints.indexes.push_back(key);
+    naoJoints.positions.push_back(val);
   }
   return naoJoints;
 }
 
 
+TEST(TestJointsNaoToSim, TestOneJoint)
+{
+  nao_command_msgs::msg::JointPositions nao_joints;
+  nao_joints.indexes.push_back(nao_command_msgs::msg::JointIndexes::LHIPROLL);
+  nao_joints.positions.push_back(0.4);
+
+  std::map<SimJointIndex, float> expected_sim_joints = {{lle2, 0.4}};
+
+  test(nao_joints, expected_sim_joints);
+}
+
+TEST(TestJointsNaoToSim, TestOneJointInversion)
+{
+  nao_command_msgs::msg::JointPositions nao_joints;
+  nao_joints.indexes.push_back(nao_command_msgs::msg::JointIndexes::LHIPPITCH);
+  nao_joints.positions.push_back(0.6);
+
+  std::map<SimJointIndex, float> expected_sim_joints = {{lle3, -0.6}};
+  test(nao_joints, expected_sim_joints);
+}
+
+
 TEST(TestJointsNaoToSim, Test)
 {
-  std::map<int, float> nao_joints_map = {
-    {nao_interfaces::msg::Joints::HEADYAW, -0.01},
-    {nao_interfaces::msg::Joints::HEADPITCH, 0},
-    {nao_interfaces::msg::Joints::LSHOULDERPITCH, 0.01},
-    {nao_interfaces::msg::Joints::LSHOULDERROLL, 0.02},
-    {nao_interfaces::msg::Joints::LELBOWYAW, 0.03},
-    {nao_interfaces::msg::Joints::LELBOWROLL, 0.04},
-    {nao_interfaces::msg::Joints::LWRISTYAW, 0.05},
-    {nao_interfaces::msg::Joints::LHIPYAWPITCH, 0.06},
-    {nao_interfaces::msg::Joints::LHIPROLL, 0.07},
-    {nao_interfaces::msg::Joints::LHIPPITCH, 0.08},
-    {nao_interfaces::msg::Joints::LKNEEPITCH, 0.09},
-    {nao_interfaces::msg::Joints::LANKLEPITCH, 0.10},
-    {nao_interfaces::msg::Joints::LANKLEROLL, 0.11},
-    {nao_interfaces::msg::Joints::RHIPROLL, 0.12},
-    {nao_interfaces::msg::Joints::RHIPPITCH, 0.13},
-    {nao_interfaces::msg::Joints::RKNEEPITCH, 0.14},
-    {nao_interfaces::msg::Joints::RANKLEPITCH, 0.15},
-    {nao_interfaces::msg::Joints::RANKLEROLL, 0.16},
-    {nao_interfaces::msg::Joints::RSHOULDERPITCH, 0.17},
-    {nao_interfaces::msg::Joints::RSHOULDERROLL, 0.18},
-    {nao_interfaces::msg::Joints::RELBOWYAW, 0.19},
-    {nao_interfaces::msg::Joints::RELBOWROLL, 0.20},
-    {nao_interfaces::msg::Joints::RWRISTYAW, 0.21},
-    {nao_interfaces::msg::Joints::LHAND, 0.22},
-    {nao_interfaces::msg::Joints::RHAND, 0.23}};
+  // The order of joints can be in any order.
+  // In this case, headpitch is missing and headyaw is at end of vector.
+  std::vector<std::pair<int, float>> nao_joints_vec = {
+    {nao_command_msgs::msg::JointIndexes::HEADPITCH, 0},
+    {nao_command_msgs::msg::JointIndexes::LSHOULDERPITCH, 0.01},
+    {nao_command_msgs::msg::JointIndexes::LSHOULDERROLL, 0.02},
+    {nao_command_msgs::msg::JointIndexes::LELBOWYAW, 0.03},
+    {nao_command_msgs::msg::JointIndexes::LELBOWROLL, 0.04},
+    {nao_command_msgs::msg::JointIndexes::LWRISTYAW, 0.05},
+    {nao_command_msgs::msg::JointIndexes::LHIPYAWPITCH, 0.06},
+    {nao_command_msgs::msg::JointIndexes::LHIPROLL, 0.07},
+    {nao_command_msgs::msg::JointIndexes::LHIPPITCH, 0.08},
+    {nao_command_msgs::msg::JointIndexes::LKNEEPITCH, 0.09},
+    {nao_command_msgs::msg::JointIndexes::LANKLEPITCH, 0.10},
+    {nao_command_msgs::msg::JointIndexes::LANKLEROLL, 0.11},
+    {nao_command_msgs::msg::JointIndexes::RHIPROLL, 0.12},
+    {nao_command_msgs::msg::JointIndexes::RHIPPITCH, 0.13},
+    {nao_command_msgs::msg::JointIndexes::RKNEEPITCH, 0.14},
+    {nao_command_msgs::msg::JointIndexes::RANKLEPITCH, 0.15},
+    {nao_command_msgs::msg::JointIndexes::RANKLEROLL, 0.16},
+    {nao_command_msgs::msg::JointIndexes::RSHOULDERPITCH, 0.17},
+    {nao_command_msgs::msg::JointIndexes::RSHOULDERROLL, 0.18},
+    {nao_command_msgs::msg::JointIndexes::RELBOWYAW, 0.19},
+    {nao_command_msgs::msg::JointIndexes::RELBOWROLL, 0.20},
+    {nao_command_msgs::msg::JointIndexes::RWRISTYAW, 0.21},
+    {nao_command_msgs::msg::JointIndexes::LHAND, 0.22},
+    {nao_command_msgs::msg::JointIndexes::RHAND, 0.23},
+    {nao_command_msgs::msg::JointIndexes::HEADYAW, -0.01}};
 
   std::map<SimJointIndex, float> expected_sim_joints = {
     {he1, -0.01},
@@ -92,6 +122,6 @@ TEST(TestJointsNaoToSim, Test)
     {rae4, 0.20},
   };
 
-  nao_interfaces::msg::Joints nao_joints = createJointsMsg(nao_joints_map);
+  nao_command_msgs::msg::JointPositions nao_joints = createJointsMsg(nao_joints_vec);
   test(nao_joints, expected_sim_joints);
 }
