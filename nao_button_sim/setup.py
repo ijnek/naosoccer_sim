@@ -15,8 +15,8 @@ setup(
     zip_safe=True,
     maintainer='ijnek',
     maintainer_email='kenjibrameld@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='Allows simulating button presses through command line interface',
+    license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
