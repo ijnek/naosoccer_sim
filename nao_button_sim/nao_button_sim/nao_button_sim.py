@@ -14,7 +14,7 @@
 
 import os
 
-from nao_interfaces.msg import Buttons
+from nao_sensor_msgs.msg import Buttons
 
 from pynput import keyboard
 
@@ -78,7 +78,7 @@ class ButtonsPublisher(Node):
 
         self.declare_parameter('frequency', 50)
 
-        self.publisher_ = self.create_publisher(Buttons, 'buttons', 10)
+        self.publisher_ = self.create_publisher(Buttons, 'sensors/buttons', 10)
         frequency = self.get_parameter('frequency').get_parameter_value().integer_value
         if frequency == 0:
             print('Could not read parameter correctly. frequency must be an ' +
