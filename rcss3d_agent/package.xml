@@ -4,7 +4,7 @@
   <name>rcss3d_agent</name>
   <version>0.0.2</version>
   <description>TODO: Package description</description>
-  <maintainer email="kenjibrameld@gmail.com">kenji</maintainer>
+  <maintainer email="kenjibrameld@gmail.com">ijnek</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
