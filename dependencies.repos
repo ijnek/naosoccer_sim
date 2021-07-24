@@ -3,7 +3,7 @@ repositories:
     type: git
     url: https://github.com/ijnek/nao_interfaces.git
     version: main
-  soccer_vision_msgs:
+  soccer_interfaces:
     type: git
     url: https://github.com/ijnek/soccer_interfaces.git
     version: main
