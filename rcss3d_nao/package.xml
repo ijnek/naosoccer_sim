@@ -3,7 +3,7 @@
 <package format="3">
   <name>rcss3d_nao</name>
   <version>0.0.0</version>
-  <description>Package that provides a nao like interface when connecting to rcss3d</description>
+  <description>Package that provides a ROS2 nao interface when connecting to rcss3d</description>
   <maintainer email="kenjibrameld@gmail.com">ijnek</maintainer>
   <license>Apache License 2.0</license>
 
