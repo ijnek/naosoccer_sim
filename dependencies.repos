@@ -10,4 +10,4 @@ repositories:
   ros2_rcss3d:
     type: git
     url: https://gitlab.com/ijnek/ros2_rcss3d.git
-    version: kenji-galactic
+    version: kenji-rolling
