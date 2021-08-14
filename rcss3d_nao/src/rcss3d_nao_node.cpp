@@ -30,7 +30,10 @@ int main(int argc, char * argv[])
     "--ros-args",
     "--remap", "joint_states:=_joint_states",
     "--remap", "imu/data_raw:=_imu/data_raw",
-    "--remap", "joint_commands:=_joint_commands",
+    "--remap", "joint_commands:=_joint_commands"
+  }).parameter_overrides(
+  {
+    {"camera_frame", "CameraTop_frame"}
   });
   auto rcss3d_controller_node = std::make_shared<rcss3d_controller::Rcss3DController>(
     options_controller_node);
