@@ -15,6 +15,7 @@
 #ifndef RCSS3D_NAO__RCSS3D_NAO_HPP_
 #define RCSS3D_NAO__RCSS3D_NAO_HPP_
 
+#include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joint_state.hpp"
 #include "sensor_msgs/msg/imu.hpp"
@@ -24,6 +25,7 @@
 #include "nao_sensor_msgs/msg/angle.hpp"
 #include "nao_command_msgs/msg/joint_positions.hpp"
 #include "rcss3d_controller_msgs/msg/joint_position_command.hpp"
+#include "rcss3d_nao/complementary_filter.hpp"
 
 namespace rcss3d_nao
 {
@@ -46,6 +48,8 @@ private:
 
   rclcpp::Subscription<nao_command_msgs::msg::JointPositions>::SharedPtr
     joint_command_positions_sub;
+
+  ComplementaryFilter complementaryFilter;
 };
 
 }  // namespace rcss3d_nao

@@ -51,8 +51,13 @@ Rcss3DNao::Rcss3DNao(const rclcpp::NodeOptions & options)
     [this](sensor_msgs::msg::Imu::UniquePtr imuPtr) {
       RCLCPP_DEBUG(this->get_logger(), "Received _imu/data_raw");
       sensor_msgs::msg::Imu imu = *imuPtr;
-      accelerometer_pub->publish(sim_to_nao::getAccelerometer(imu));
-      gyroscope_pub->publish(sim_to_nao::getGyroscope(imu));
+      nao_sensor_msgs::msg::Accelerometer acc = sim_to_nao::getAccelerometer(imu);
+      nao_sensor_msgs::msg::Gyroscope gyr = sim_to_nao::getGyroscope(imu);
+      nao_sensor_msgs::msg::Angle ang = complementaryFilter.update(acc, gyr, imu.header.stamp);
+
+      accelerometer_pub->publish(acc);
+      gyroscope_pub->publish(gyr);
+      angle_pub->publish(ang);
     });
 
   joint_command_positions_sub =

@@ -21,7 +21,8 @@ find_package(rcss3d_controller_msgs REQUIRED)
 add_library(rcss3d_nao_lib SHARED
   src/rcss3d_nao.cpp
   src/nao_to_sim.cpp
-  src/sim_to_nao.cpp)
+  src/sim_to_nao.cpp
+  src/complementary_filter.cpp)
 
 ament_target_dependencies(rcss3d_nao_lib
   rclcpp
