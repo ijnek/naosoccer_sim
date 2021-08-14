@@ -2,8 +2,8 @@
 Changelog for package rcss3d_nao
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.0 (2021-08-14)
+------------------
 * update package description for rcss3d_nao
 * add angle calculation with complementaryFilter
 * added tests to ensure code is working correctly
