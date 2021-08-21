@@ -63,6 +63,7 @@ nao_sensor_msgs::msg::JointPositions getJointPositions(
   const sensor_msgs::msg::JointState & sim_joints)
 {
   auto nao_joints = nao_sensor_msgs::msg::JointPositions{};
+  nao_joints.header = sim_joints.header;
 
   for (unsigned i = 0; i < sim_joints.name.size(); ++i) {
     auto sim_joint_name = sim_joints.name.at(i);
