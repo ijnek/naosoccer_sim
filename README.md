@@ -8,5 +8,5 @@
 
 ~~For more information, see our [Documentation](https://naosoccer-sim.readthedocs.io/)~~
 
-This package is deprecated, and separated out into
+This repository is deprecated, and separated out into
 [rcss3d_nao](https://github.com/ros-sports/rcss3d_nao) and [nao_button_sim](https://github.com/ijnek/nao_button_sim)
